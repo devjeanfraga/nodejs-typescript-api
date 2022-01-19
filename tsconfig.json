@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "target": "ES2021",
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "lib": ["ES2021"], ///inclui por default os tipos do es2021
+    "sourceMap": true, // quando compilar ele vai botar um mapa assim ajuda no debug
+    "outDir": "dist", //onde o diretório será compilado
+    "strict": true, //sempre pra ter sctric mode
+    "noImplicitAny": true, //nao deixar nada implicito
+    "strictNullChecks": true, // aqui tbm, nao deixa uma const ou let sem tipo
+    "strictFunctionTypes": true, // idem 
+    "noImplicitThis": true, // ?????
+    "resolveJsonModule":true,
+    "alwaysStrict": true,
+    "removeComments": true,
+    "noImplicitReturns": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "paths": {
+      "@src/*": ["./src/*"],
+      "@test/*": ["./test/*"]
+    },
+    "rootDirs": [
+      "./src",
+      "./tes"
+    ],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+  },
+  "include": [
+    "./src/**/*.ts",
+    "./test/**/*ts"
+  ],
+  "exclude": [
+    "./node_modules/*",
+    "dist"
+  ]
+}
