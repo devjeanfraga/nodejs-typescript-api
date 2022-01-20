@@ -1,0 +1,6 @@
+*** supertest *** 
+Roda o server em modo de test.
+{yarn add -D supertest @types/supertest}
+
+--runInBand para rodar em ordem para test functional, test de unidade. 
+* O jest por padrão roda em paralelo 
