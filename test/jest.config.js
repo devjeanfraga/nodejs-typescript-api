@@ -1,6 +1,7 @@
-const { resolve } = require('path');
+/* eslint-disable */
+const { resolve } = require("path");
 const root = resolve(__dirname, '..');
-const rootConfig = require(`${root}/jest.config.js`);  //importa a config global do jest;
+const rootConfig = require(`${root}/jest.config.js`); 
 
 
 //sobreescreve algumas chaves //os "..." indicam o marge do objeto global com o objo local;
