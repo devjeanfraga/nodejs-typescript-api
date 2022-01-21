@@ -1,5 +1,7 @@
 import { AxiosStatic } from 'axios';
 
+
+
 export interface StormGlassPointSource {
   [key: string] : number; // a key seria a string "noaa" do response;
 }
@@ -39,11 +41,18 @@ export class StormGlass {
 
   //eslint-disable-next-line
   public async fetchPoints  (lat: number, lng: number): Promise<ForecastPoint[]> { 
-    const response = await this.request.get<StormGlassForecastResponse>(
-      `https://api.stormglass.io/v2/weather/point?params=${this.stormGlassAPIParams}&source=${this.stormGlassAPISource}&lat=${lat}=${lng}`,
-    ); 
-    
-    return this.normalizeResponse(response.data);  
+
+    try{
+      const response = await this.request.get<StormGlassForecastResponse>(
+        `https://api.stormglass.io/v2/weather/point?params=${this.stormGlassAPIParams}&source=${this.stormGlassAPISource}&lat=${lat}=${lng}`,
+      ); 
+      
+      return this.normalizeResponse(response.data);  
+      // eslint-disable-next-line
+    } catch (error: any) {
+        throw new Error(` Unexpected error when try to comunicate with the StormGlass Service: ${error.message}`);
+       
+    }
 
   }
 
