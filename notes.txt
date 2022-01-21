@@ -1,6 +1,31 @@
-*** supertest *** 
-Roda o server em modo de test.
-{yarn add -D supertest @types/supertest}
 
---runInBand para rodar em ordem para test functional, test de unidade. 
-* O jest por padrão roda em paralelo 
+***Supertest***
+  É um módulo que forja requisições visando testar webservers em Node.
+  js e verifica o retorno das mesmas para automatizar testes deste tipo de infraestrutura,
+  principalmente web APIs.
+  Roda o server em modo de test.
+  instalação: yarn add -D supertest @types/supertest
+
+
+***Jest***
+  Jest é um framework de teste unitário de código aberto em JavaScript criado pelo Facebook a partir do framework Jasmine
+  O jest por padrão roda em paralelo,
+  mas com o < --runInBand > roda em ordem (um depois do outro), aconselhado para tests funcionais ( de unidade). 
+  https://jestjs.io/pt-BR/
+  
+
+  ***Observação***
+    Client na aqruitetura do código será a unidade responsável por se comunicar com os serviços externos
+    ex: outras APIs.
+
+  ***mocks e stubs***
+    Usamos o mock quando queremos saber se uma função vai ser chamada corretamente,
+    quantas vezes ela vai ser chamada, se os parâmetros esperados são os corretos, 
+    já o stub vai nos dizer se o resultado do código retorna de acordo com os parâmetros passado, 
+    se retorna sucesso, erro ou exceção por exemplo, é previsível.
+
+  ***Fixtures***
+    A pasta fixtures significa acessórios, e o arquivo "stormGlass_weather_3_hours.json" funcionais
+    foi colocado na pasta de test de integração porque será usado alí também. 
+
+
