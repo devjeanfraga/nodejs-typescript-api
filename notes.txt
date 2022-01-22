@@ -28,4 +28,10 @@
     A pasta fixtures significa acessórios, e o arquivo "stormGlass_weather_3_hours.json" funcionais
     foi colocado na pasta de test de integração porque será usado alí também. 
 
-
+  ***Bug de Tipagem***
+  catch(err: unknown) {
+     throw new Error(
+           `Unexpected error when trying to communicate to StormGlass: 
+            ${(err as Error).message}`
+     );      
+ } 
