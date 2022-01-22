@@ -1,4 +1,6 @@
+import { InternalError } from '@src/util/internal-error';
 import { AxiosStatic } from 'axios';
+
 
 
 
@@ -32,6 +34,14 @@ export interface ForecastPoint {
   windSpeed: number;
 }
 
+export class ClientRequestError extends InternalError {
+  constructor (message: string) {
+    const InternalMessage = `Unexpected error when try to comunicate with the StormGlass Service`;
+    super(`${InternalMessage}:${message}`);
+  }
+}
+
+
 export class StormGlass {
   
   readonly stormGlassAPIParams = 'swellDirection%2CswellHeight%2CswellPeriod%2CwaveDirection%2CwaveHeight%2CwindDirection%2CwindSpeed';
@@ -48,15 +58,23 @@ export class StormGlass {
       ); 
       
       return this.normalizeResponse(response.data);  
-      // eslint-disable-next-line
-    } catch (error: any) {
-        throw new Error(` Unexpected error when try to comunicate with the StormGlass Service: ${error.message}`);
-       
-    }
+      // eslint-disable-next-line/
+    }catch(err: unknown) {
 
+      throw new Error(`Unexpected error when trying to communicate to StormGlass: ${(err as Error).message}`);
+      
+    }
   }
 
-  private normalizeResponse ( points:StormGlassForecastResponse ): ForecastPoint[] {
+  /*
+       if (err instanceof Error) {
+        throw new Error(err.message);
+        
+      }
+      throw new ClientRequestError((err as Error).message);
+  */
+
+  private normalizeResponse ( points:StormGlassForecastResponse ):ForecastPoint[] {
     return points.hours.filter(this.isValidPoint.bind(this)).map(point => ({
      
       swellDirection: point.swellDirection[this.stormGlassAPISource],

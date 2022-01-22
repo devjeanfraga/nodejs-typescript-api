@@ -3,10 +3,15 @@ import axios from 'axios';
 import stormGlassWeather3HoursFixtures from '@test/fixtures/stormGlass_weather_3_hours.json';
 import stormGlassNormalized3hoursFixtures from '@test/fixtures/stormGlass_normalized_response_3_hours.json';
 
+
+
 jest.mock("axios"); //jest inicializa com um require de axios;
 
 describe('StormGlass Client', () => {
+
   const axiosMocked = axios as jest.Mocked < typeof axios >;
+
+
   it('Shoud return the normalize forecast from the StormGlass service', async () => {
     const lat = -22.8876102;
     const lng = -42.0173967;
@@ -42,11 +47,12 @@ describe('StormGlass Client', () => {
   it('Deve retornar um erro do StormGlass service quando a request falhar antes de chegar ao serviço externo', async () => {
     const lat = -22.8876102;
     const lng = -42.0173967;
-
-    axiosMocked.get.mockResolvedValue({message:'Network error'});
+    
+     axiosMocked.get.mockRejectedValue({message: 'Network Error'})
     const stormGlass = new StormGlass(axiosMocked);
-    expect( await stormGlass.fetchPoints(lat, lng) ).rejects.toThrow(
-      'Unexpected error when try to comunicate with the StormGlass Service: Network error'
+    await expect(stormGlass.fetchPoints(lat, lng)).rejects.toThrow(
+      'Unexpected error when trying to communicate to StormGlass: Network Error'
     );
-  })
+  });
+
 });
