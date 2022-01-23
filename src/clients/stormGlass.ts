@@ -1,5 +1,5 @@
 import { InternalError } from '@src/util/internal-error';
-import { AxiosStatic } from 'axios';
+import { AxiosError, AxiosStatic } from 'axios';
 
 
 
@@ -36,11 +36,17 @@ export interface ForecastPoint {
 
 export class ClientRequestError extends InternalError {
   constructor (message: string) {
-    const InternalMessage = `Unexpected error when try to comunicate with the StormGlass Service`;
-    super(`${InternalMessage}:${message}`);
+    const InternalMessage = `Unexpected error when trying to communicate to StormGlass`;
+    super(`${InternalMessage}: ${message}`);
   }
 }
 
+export class StormGlassResponseError extends InternalError {
+  constructor (message: string) {
+    const InternalMessage = 'Unexpected error returned by the stormGlass service';
+    super(`${InternalMessage}: ${message}`);
+  }
+}
 
 export class StormGlass {
   
@@ -58,21 +64,26 @@ export class StormGlass {
       ); 
       
       return this.normalizeResponse(response.data);  
-      // eslint-disable-next-line/
-    }catch(err: unknown) {
+      // eslint-disable-next-line
+    }catch(err) {
+      const axiosError = err as AxiosError;
+      if(
+        axiosError instanceof Error &&
+        axiosError.response &&
+        axiosError.response.status
+      ) {
+        const dataError = JSON.stringify(axiosError.response.data).replace(/[\"]/g, ''); //eslint-disable-line
+        const codeError = axiosError.response.status;
 
-      throw new Error(`Unexpected error when trying to communicate to StormGlass: ${(err as Error).message}`);
-      
+        throw new StormGlassResponseError(
+          `Error: ${dataError} Code: ${codeError}`
+        );
+      }
+      //throw new Error(`Unexpected error when trying to communicate to StormGlass: ${(err as Error).message}`);
+      throw new ClientRequestError( (err as { message: any }).message ); //eslint-disable-line
     }
   }
 
-  /*
-       if (err instanceof Error) {
-        throw new Error(err.message);
-        
-      }
-      throw new ClientRequestError((err as Error).message);
-  */
 
   private normalizeResponse ( points:StormGlassForecastResponse ):ForecastPoint[] {
     return points.hours.filter(this.isValidPoint.bind(this)).map(point => ({
