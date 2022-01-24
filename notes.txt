@@ -35,3 +35,32 @@
             ${(err as Error).message}`
      );      
  } 
+
+
+  ***Desacoplamento***
+  No src/util/Request.ts 
+  -fizemos uma classe que 'imita o que o axios faz',
+  -o construtor requebe o axios ou qualquer outro pg como Request
+  -criamos um método get que tem um tipo generic <T>
+  -O get recebe os mesmo params do get do axios
+  - esses parametros tem tipagens do proprio axios
+  -Extendemos essas tipagens que sao interfaces para nossas interfaces
+  -E nossas interfaces viram tipagens do nossos params 
+
+    EX: 
+    export interface RequestConfig  extends AxiosRequestConfig {}
+    ...
+    public get<T>(url:string, config: RequestConfig = {})
+  - o return será uma Promisse com o tipo AxiosResponse desacoplada
+    e extendida na nossa interface Response que por sua vez terá o tipo T generic
+    
+    EX: 
+    export interface Response<T = any > extends AxiosResponse<T> {}
+    Promise<Response<T>>
+  - por fim, podemos dar um return acessando a class e o método get 
+    passando os tipos do método que será T generic e Response o qual terá T
+    generic como tipo tbm; 
+
+    EX:
+    return this.request.get<T, Response<T>>(url, config);
+
