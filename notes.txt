@@ -64,3 +64,8 @@
     EX:
     return this.request.get<T, Response<T>>(url, config);
 
+  - *** Acesando methods por meio de prototype ***
+    // mockando métodos por meio de prototype
+    // Se como para acessar o método temo que dar o new na class 
+    // nesse caso podemos substituir o metodo fetchPoints sem acessar o new por meio do prototype
+    // NÃO É UMA BOA PRÁTICA!!!
