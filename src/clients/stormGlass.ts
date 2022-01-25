@@ -9,7 +9,7 @@ export interface StormGlassPointSource {
 
 export interface StormGlassPoint {
   time: string;
-  readonly swellDirection: StormGlassPointSource; 
+  readonly swellDirection: StormGlassPointSource;
   readonly swellHeight: StormGlassPointSource;
   readonly swellPeriod: StormGlassPointSource;
   readonly waveDirection: StormGlassPointSource;
@@ -59,9 +59,8 @@ export class StormGlass {
     'swellDirection%2CswellHeight%2CswellPeriod%2CwaveDirection%2CwaveHeight%2CwindDirection%2CwindSpeed';
   readonly stormGlassAPISource = 'noaa';
 
-  constructor(protected request = new HTTPUtil.Request() ) {}
+  constructor(protected request = new HTTPUtil.Request()) {}
 
-  
   public async fetchPoints(lat: number, lng: number): Promise<ForecastPoint[]> {
     try {
       const response = await this.request.get<StormGlassForecastResponse>(
@@ -76,14 +75,11 @@ export class StormGlass {
       );
 
       return this.normalizeResponse(response.data);
-      
     } catch (err: any) { //eslint-disable-line
       
+
       if (HTTPUtil.Request.isRequestError(err)) {
-        const dataError = JSON.stringify(err.response.data).replace(
-          /["]/g, 
-          ''
-        ); 
+        const dataError = JSON.stringify(err.response.data).replace(/["]/g, '');
         const codeError = err.response.status;
         throw new StormGlassResponseError(
           `Error: ${dataError} Code: ${codeError}`
