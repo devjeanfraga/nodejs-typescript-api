@@ -18,13 +18,19 @@ export interface Beach {
 //Omit irá omitir o campo user do Beach
 export interface BeachForecast extends Omit<Beach, 'user'>, ForecastPoint {}
 
+
+export interface TimeForecast {
+  time: string,
+  forecast: BeachForecast[]
+}
+
 export class Forecast {
   //Passamos uma instancia da class para 
   //possibilitar que futuramente outros serviços possam ser aplicados ao Forecast
   constructor(protected stormGlass =  new StormGlass()) {}
 
   public async processForecastForBeaches(beaches:
-     Beach[]): Promise<BeachForecast[]> {
+     Beach[]): Promise<TimeForecast[]> {
     const pointsWithCorrectSources: BeachForecast[] = [];
     for (const beach of beaches ) {
       const points  = await this.stormGlass.fetchPoints(beach.lat, beach.lng);
@@ -42,6 +48,26 @@ export class Forecast {
       pointsWithCorrectSources.push(...enrichedBeachData);
     }
 
-    return pointsWithCorrectSources; 
+    return this.mapForecastByTime(pointsWithCorrectSources); 
+  }
+
+  private mapForecastByTime (forecast: BeachForecast[]): TimeForecast[] {
+    const forecastByTime: TimeForecast[] = []; //cria um array vazio para receber os novos dados formatados;
+
+    for (const point of forecast) { //loop onde point será o objeto de dados do forecast com o stormGlass;
+      const timePoint = forecastByTime.find((f) => f.time === point.time); //verifico se forecastBytime Array tem algum valor de time igual ao forecast.time
+
+      if(timePoint) { 
+        timePoint.forecast.push(point); //caso a premissa anterior seja verdadeira damos um push do forecast na key forecast
+
+      } else {
+        forecastByTime.push({ //se não damos um push e criamos o agrupamento by time;
+          time: point.time,
+          forecast: [point],
+        });
+      }
+    }
+
+    return forecastByTime;
   }
 }
