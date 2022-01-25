@@ -8,8 +8,8 @@ jest.mock('@src/util/Request'); //jest inicializa com um require de axios;
 describe('StormGlass Client', () => {
   const MockedRequestClass = HTTPUtil.Request as jest.Mocked<
     typeof HTTPUtil.Request
-  >; //Aqui se usa typeof pq queremos a class em sim nao uma instancia dela
-  const mockedRequest = new HTTPUtil.Request() as jest.Mocked<HTTPUtil.Request>; //Aqui nao se usa typeof pq é uma instancia nbão é stático
+  >; //Aqui se usa typeof pq queremos a class em si nao uma instancia dela para poder usar métodos estáticos.
+  const mockedRequest = new HTTPUtil.Request() as jest.Mocked<HTTPUtil.Request>; //Aqui nao se usa typeof pq é uma instancia não é stático
 
   it('Shoud return the normalize forecast from the StormGlass service', async () => {
     const lat = -22.8876102;

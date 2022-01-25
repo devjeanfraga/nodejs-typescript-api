@@ -5,15 +5,9 @@ import { Forecast, Beach, BeachPosition } from '../forecast';
 jest.mock('@src/clients/stormGlass');
 
 describe('Forecast Services', () => {
+  const mockedStormGlassSErvice = new StormGlass() as jest.Mocked< StormGlass >;
   it('Shoud return the forecast for a list of beaches', async () => {
-    StormGlass.prototype.fetchPoints = jest
-      .fn()
-      .mockResolvedValue(stormGlassNormalizedResponseFixture);
-    // mockando métodos por meio de prototype (substituindo o fetchPoints Method pelo method do jest);
-    // Se como para acessar o método temo que dar o new na class
-    // nesse caso podemos substituir o metodo fetchPoints sem acessar o new por meio do prototype
-    // NÃO É UMA BOA PRÁTICA!!!
-
+    mockedStormGlassSErvice.fetchPoints.mockResolvedValue(stormGlassNormalizedResponseFixture);
     const beaches: Beach[] = [
       {
         name: 'Manly',
@@ -87,8 +81,16 @@ describe('Forecast Services', () => {
 
     ];
 
-    const forecast = new Forecast(new StormGlass());
+    const forecast = new Forecast(mockedStormGlassSErvice);
     const beachesWithRatings = await  forecast.processForecastForBeaches(beaches);
     expect(beachesWithRatings).toEqual(expectedResponse);
   });
+
+  it('should return an empty list when the beaches array is empty', async () => {
+    const forecast = new Forecast();
+    const response =  await forecast.processForecastForBeaches([]);
+
+    expect(response).toEqual([]);
+
+  })
 });
