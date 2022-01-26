@@ -1,4 +1,5 @@
 import { ForecastPoint, StormGlass} from "@src/clients/stormGlass";
+import { InternalError } from "@src/util/internal-error";
 
 export enum BeachPosition { // Enum é um objeto key:value que facilita na hora de reusar as keys;
   S = 'S',
@@ -24,6 +25,13 @@ export interface TimeForecast {
   forecast: BeachForecast[]
 }
 
+export class ForecastProcessInternalError extends InternalError {
+  constructor (message: string) {
+    super(`Unexpected error during the forecast processing: ${message}`)
+  }
+  
+}
+
 export class Forecast {
   //Passamos uma instancia da class para 
   //possibilitar que futuramente outros serviços possam ser aplicados ao Forecast
@@ -31,10 +39,27 @@ export class Forecast {
 
   public async processForecastForBeaches(beaches:
      Beach[]): Promise<TimeForecast[]> {
-    const pointsWithCorrectSources: BeachForecast[] = [];
-    for (const beach of beaches ) {
-      const points  = await this.stormGlass.fetchPoints(beach.lat, beach.lng);
-      const enrichedBeachData =  points.map((e) => ({
+    try {
+      const pointsWithCorrectSources: BeachForecast[] = [];
+      for (const beach of beaches ) {
+        const points  = await this.stormGlass.fetchPoints(beach.lat, beach.lng);
+        const enrichedBeachData = this.enrichedBeachData(points, beach);
+        
+        pointsWithCorrectSources.push(...enrichedBeachData);
+      }
+  
+      return this.mapForecastByTime(pointsWithCorrectSources); 
+    } catch (error) {
+
+      throw new ForecastProcessInternalError( (error as ForecastProcessInternalError).message); 
+    }
+  }
+
+  private enrichedBeachData (
+    points: ForecastPoint[],
+    beach: Beach
+    ): BeachForecast[] {
+      return points.map((e) => ({
         //Iremos fazer o marge do obj retornado do  stormGlass com o objeto beaches
         ...{
           lat: beach.lat,
@@ -45,11 +70,7 @@ export class Forecast {
         },
         ...e
       }));
-      pointsWithCorrectSources.push(...enrichedBeachData);
     }
-
-    return this.mapForecastByTime(pointsWithCorrectSources); 
-  }
 
   private mapForecastByTime (forecast: BeachForecast[]): TimeForecast[] {
     const forecastByTime: TimeForecast[] = []; //cria um array vazio para receber os novos dados formatados;
@@ -70,4 +91,6 @@ export class Forecast {
 
     return forecastByTime;
   }
+
+
 }
