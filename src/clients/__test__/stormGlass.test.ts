@@ -24,7 +24,7 @@ describe('StormGlass Client', () => {
     expect(response).toEqual(stormGlassNormalized3hoursFixtures);
   });
 
-  it('Shoud excluede incomplete data points', async () => {
+  it('Shoud exclude incomplete data points', async () => {
     const lat = -22.8876102;
     const lng = -42.0173967;
     const imcompleteResponse = {
@@ -58,7 +58,7 @@ describe('StormGlass Client', () => {
     );
   });
 
-  it('Shoud get a StormGlassResponseError when the StormGlass service response with a error', async () => {
+  it('Shoud get a StormGlassResponseError when the StormGlass service response with an error', async () => {
     const lat = -22.8876102;
     const lng = -42.0173967;
 
