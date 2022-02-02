@@ -33,10 +33,10 @@ export class SetupServer extends Server {
     await database.connect();
   }
 
-//O close para fechar toda a nossa aplicação (boa prática);
- public async  close(): Promise<void> {
-  await database.close(); 
- } 
+  //O close para fechar toda a nossa aplicação (boa prática);
+  public async close(): Promise<void> {
+    await database.close();
+  }
 
   public getApp(): Application {
     return this.app;

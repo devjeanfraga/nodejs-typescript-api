@@ -76,7 +76,6 @@ export class StormGlass {
 
       return this.normalizeResponse(response.data);
     } catch (err: any) { //eslint-disable-line
-      
 
       if (HTTPUtil.Request.isRequestError(err)) {
         const dataError = JSON.stringify(err.response.data).replace(/["]/g, '');
