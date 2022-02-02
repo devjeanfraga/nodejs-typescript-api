@@ -3,9 +3,11 @@ import stormGlassNormalizedResponseFixture from '@test/fixtures/stormGlass_norma
 import { Forecast, Beach, BeachPosition } from '../forecast';
 import { ForecastProcessInternalError } from '@src/services/forecast';
 
+
 jest.mock('@src/clients/stormGlass');
 
-describe('Forecast Services', () => {
+describe('Forecast Services', async () => {
+  
   const mockedStormGlassSErvice = new StormGlass() as jest.Mocked<StormGlass>;
   it('Shoud return the forecast for a list of beaches', async () => {
     mockedStormGlassSErvice.fetchPoints.mockResolvedValue(
