@@ -1,19 +1,6 @@
 import { ForecastPoint, StormGlass } from '@src/clients/stormGlass';
+import { Beach } from '@src/models/beach';
 import { InternalError } from '@src/util/internal-error';
-
-export enum BeachPosition { // Enum é um objeto key:value que facilita na hora de reusar as keys;
-  S = 'S',
-  E = 'E',
-  W = 'W',
-  N = 'N',
-}
-
-export interface Beach {
-  name: string;
-  position: BeachPosition;
-  lat: number;
-  lng: number;
-}
 
 //Omit irá omitir o campo user do Beach
 export interface BeachForecast extends Omit<Beach, 'user'>, ForecastPoint {}

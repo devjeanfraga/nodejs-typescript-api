@@ -1,13 +1,13 @@
 import { StormGlass } from '@src/clients/stormGlass';
 import stormGlassNormalizedResponseFixture from '@test/fixtures/stormGlass_normalized_response_3_hours.json';
-import { Forecast, Beach, BeachPosition } from '../forecast';
+import { Forecast } from '../forecast';
 import { ForecastProcessInternalError } from '@src/services/forecast';
+import { Beach, BeachPosition } from '@src/models/beach';
 
 
 jest.mock('@src/clients/stormGlass');
 
-describe('Forecast Services', async () => {
-  
+describe('Forecast Services', () => {
   const mockedStormGlassSErvice = new StormGlass() as jest.Mocked<StormGlass>;
   it('Shoud return the forecast for a list of beaches', async () => {
     mockedStormGlassSErvice.fetchPoints.mockResolvedValue(
@@ -19,7 +19,6 @@ describe('Forecast Services', async () => {
         position: BeachPosition.E,
         lat: -33.792726,
         lng: 151.289824,
-        user: 'some-id',
       },
     ];
     const expectedResponse = [
@@ -106,7 +105,7 @@ describe('Forecast Services', async () => {
         position: BeachPosition.E,
         lat: -33.792726,
         lng: 151.289824,
-        user: 'some-id',
+      
       },
     ];
     mockedStormGlassSErvice.fetchPoints.mockRejectedValue(
