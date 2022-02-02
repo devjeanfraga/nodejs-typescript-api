@@ -13,7 +13,6 @@ export interface Beach {
   position: BeachPosition;
   lat: number;
   lng: number;
-  user: string;
 }
 
 //Omit irá omitir o campo user do Beach
