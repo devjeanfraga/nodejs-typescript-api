@@ -1,50 +1,104 @@
 //test de integração
+import {Beach, BeachPosition} from '@src/models/beach';
+import nock from 'nock';
+import StormGlassWeather3HoursFixture from '@test/fixtures/stormGlass_weather_3_hours.json';
 
 describe('Beach forecast fucntional', () => {
-  it('should return a frecast with just a few times', async () => {
+  beforeEach( async ()=> {
+    await Beach.deleteMany({});
+    const defaultBeach = {
+      name: 'Manly',
+      position: BeachPosition.E,
+      lat: -33.792726,
+      lng: 151.289824,
+    }
+
+    const beach = new Beach(defaultBeach);
+    await beach.save();
+
+  })
+  it('should return a forecast with just a few times', async () => {
+
+    /*** Nock ***/
+    nock('https://api.stormglass.io:443', {
+      encodedQueryParams:true,
+      reqheaders: {
+        Authorization: (): boolean => true,
+      },
+    })
+      .defaultReplyHeaders({'access-control-allow-origin': '*'})
+      .get('/v2/weather/point')
+      .query({
+        lat: -33.792726,
+        lng: 151.289824,
+        params: /(.*)/,
+        source: 'noaa'
+      })
+      .reply(200, StormGlassWeather3HoursFixture )
     const { body, status } = await global.testRequest.get('/forecast');
     expect(status).toBe(200);
     //Make sure we use toEqual to check value not the object and array itself
     expect(body).toEqual([
       {
-        time: '2020-04-26T00:00:00+00:00',
+        time: "2022-01-20T00:00:00+00:00",
         forecast: [
+            {
+              lat: -33.792726,
+              lng: 151.289824,
+              name: 'Manly',
+              position: 'E',
+              rating: 1,
+              swellDirection: 164.19,
+              swellHeight: 0.31,
+              swellPeriod: 11.69,
+              time: "2022-01-20T00:00:00+00:00",
+              waveDirection: 86.93,
+              waveHeight: 1.23,	
+              windDirection: 61.49,
+              windSpeed: 9.67	
+            }
+          ]
+        },
           {
-            lat: -33.792726,
-            lng: 151.289824,
-            name: 'Manly',
-            position: 'E',
-            rating: 2,
-            swellDirection: 64.26,
-            swellHeight: 0.15,
-            swellPeriod: 3.89,
-            time: '2020-04-26T00:00:00+00:00',
-            waveDirection: 231.38,
-            waveHeight: 0.47,
-            windDirection: 299.45,
-          },
-        ],
-      },
-
-      {
-        time: '2020-04-26T01:00:00+00:00',
-        forecast: [
+            time: "2022-01-20T01:00:00+00:00",
+            forecast: [
+              {
+                lat: -33.792726,
+                lng: 151.289824,
+                name: 'Manly',
+                position: 'E',
+                rating: 1,
+                swellDirection: 164.22,
+                swellHeight:  0.32,
+                swellPeriod:  11.62,
+                time: "2022-01-20T01:00:00+00:00",
+                waveDirection:  86.87,
+                waveHeight:  1.19,
+                windDirection:  58.57,
+                windSpeed:  9.06
+              }
+            ]	
+           },
           {
-            lat: -33.792726,
-            lng: 151.289824,
-            name: 'Manly',
-            position: 'E',
-            rating: 2,
-            swellDirection: 123.41,
-            swellHeight: 0.21,
-            swellPeriod: 3.67,
-            time: '2020-04-26T01:00:00+00:00',
-            waveDirection: 232.12,
-            waveHeight: 0.46,
-            windDirection: 310.48,
-          },
-        ],
-      },
-    ]);
+            time: "2022-01-20T02:00:00+00:00",
+            forecast: [
+              {
+                lat: -33.792726,
+                lng: 151.289824,
+                name: 'Manly',
+                position: 'E',
+                rating: 1,
+                swellDirection: 164.24,
+                swellHeight: 0.32,
+                swellPeriod: 11.55,
+                time: "2022-01-20T02:00:00+00:00",
+                waveDirection: 86.82,
+                waveHeight: 1.14,
+                windDirection: 55.66,
+                windSpeed: 8.46
+              }
+            ]
+          }
+        ]);
   });
 });

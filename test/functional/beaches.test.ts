@@ -1,8 +1,5 @@
 import { Beach } from '@src/models/beach';
 
-
-
-
 describe('Beaches functional test', () => {
   beforeAll(async () => await Beach.deleteMany({})); //Deleta todas as praias que estão no banco de dados, garantindo que o clean state do test qaundo rodar;
   describe('When create a beach', () => {
