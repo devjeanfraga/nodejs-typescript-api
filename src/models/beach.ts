@@ -13,7 +13,6 @@ export interface Beach {
   position: BeachPosition;
   lat: number;
   lng: number;
-
 }
 
 const schema = new Schema(

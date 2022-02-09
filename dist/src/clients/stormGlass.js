@@ -25,7 +25,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.StormGlass = exports.StormGlassResponseError = exports.ClientRequestError = void 0;
 const internal_error_1 = require("@src/util/internal-error");
 const HTTPUtil = __importStar(require("@src/util/Request"));
-const config_1 = __importDefault(require("config"));
+const config_1 = __importDefault(require("config/"));
 class ClientRequestError extends internal_error_1.InternalError {
     constructor(message) {
         const InternalMessage = `Unexpected error when trying to communicate to StormGlass`;
@@ -49,7 +49,7 @@ class StormGlass {
     }
     async fetchPoints(lat, lng) {
         try {
-            const response = await this.request.get(`${stormGlassRessourceConfig.get('apiURL')}/weather/point?params=${this.stormGlassAPIParams}&source=${this.stormGlassAPISource}&lat=${lat}=${lng}`, {
+            const response = await this.request.get(`${stormGlassRessourceConfig.get('apiURL')}/weather/point?lat=${lat}&lng=${lng}&params=${this.stormGlassAPIParams}&source=${this.stormGlassAPISource}`, {
                 headers: {
                     Authorization: stormGlassRessourceConfig.get('apiToken'),
                 },

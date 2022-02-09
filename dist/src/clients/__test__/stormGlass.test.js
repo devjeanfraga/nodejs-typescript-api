@@ -40,7 +40,7 @@ describe('StormGlass Client', () => {
         const response = await stormGlass.fetchPoints(lat, lng);
         expect(response).toEqual(stormGlass_normalized_response_3_hours_json_1.default);
     });
-    it('Shoud excluede incomplete data points', async () => {
+    it('Shoud exclude incomplete data points', async () => {
         const lat = -22.8876102;
         const lng = -42.0173967;
         const imcompleteResponse = {
@@ -67,7 +67,7 @@ describe('StormGlass Client', () => {
         const stormGlass = new stormGlass_1.StormGlass(mockedRequest);
         await expect(stormGlass.fetchPoints(lat, lng)).rejects.toThrow('Unexpected error when trying to communicate to StormGlass: Network Error');
     });
-    it('Shoud get a StormGlassResponseError when the StormGlass service response with a error', async () => {
+    it('Shoud get a StormGlassResponseError when the StormGlass service response with an error', async () => {
         const lat = -22.8876102;
         const lng = -42.0173967;
         class FakeAxiosError extends Error {

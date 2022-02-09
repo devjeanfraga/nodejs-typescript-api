@@ -4,7 +4,6 @@ import { Forecast } from '../forecast';
 import { ForecastProcessInternalError } from '@src/services/forecast';
 import { Beach, BeachPosition } from '@src/models/beach';
 
-
 jest.mock('@src/clients/stormGlass');
 
 describe('Forecast Services', () => {
@@ -105,7 +104,6 @@ describe('Forecast Services', () => {
         position: BeachPosition.E,
         lat: -33.792726,
         lng: 151.289824,
-      
       },
     ];
     mockedStormGlassSErvice.fetchPoints.mockRejectedValue(

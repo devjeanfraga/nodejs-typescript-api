@@ -1,15 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Forecast = exports.ForecastProcessInternalError = exports.BeachPosition = void 0;
+exports.Forecast = exports.ForecastProcessInternalError = void 0;
 const stormGlass_1 = require("@src/clients/stormGlass");
 const internal_error_1 = require("@src/util/internal-error");
-var BeachPosition;
-(function (BeachPosition) {
-    BeachPosition["S"] = "S";
-    BeachPosition["E"] = "E";
-    BeachPosition["W"] = "W";
-    BeachPosition["N"] = "N";
-})(BeachPosition = exports.BeachPosition || (exports.BeachPosition = {}));
 class ForecastProcessInternalError extends internal_error_1.InternalError {
     constructor(message) {
         super(`Unexpected error during the forecast processing: ${message}`);
@@ -41,9 +34,9 @@ class Forecast {
                 lng: beach.lng,
                 name: beach.name,
                 position: beach.position,
-                rating: 1
+                rating: 1,
             },
-            ...e
+            ...e,
         }));
     }
     mapForecastByTime(forecast) {

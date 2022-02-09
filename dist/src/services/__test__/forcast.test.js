@@ -7,6 +7,7 @@ const stormGlass_1 = require("@src/clients/stormGlass");
 const stormGlass_normalized_response_3_hours_json_1 = __importDefault(require("@test/fixtures/stormGlass_normalized_response_3_hours.json"));
 const forecast_1 = require("../forecast");
 const forecast_2 = require("@src/services/forecast");
+const beach_1 = require("@src/models/beach");
 jest.mock('@src/clients/stormGlass');
 describe('Forecast Services', () => {
     const mockedStormGlassSErvice = new stormGlass_1.StormGlass();
@@ -15,15 +16,14 @@ describe('Forecast Services', () => {
         const beaches = [
             {
                 name: 'Manly',
-                position: forecast_1.BeachPosition.E,
+                position: beach_1.BeachPosition.E,
                 lat: -33.792726,
                 lng: 151.289824,
-                user: 'some-id'
-            }
+            },
         ];
         const expectedResponse = [
             {
-                time: "2022-01-20T00:00:00+00:00",
+                time: '2022-01-20T00:00:00+00:00',
                 forecast: [
                     {
                         lat: -33.792726,
@@ -34,16 +34,16 @@ describe('Forecast Services', () => {
                         swellDirection: 164.19,
                         swellHeight: 0.31,
                         swellPeriod: 11.69,
-                        time: "2022-01-20T00:00:00+00:00",
+                        time: '2022-01-20T00:00:00+00:00',
                         waveDirection: 86.93,
                         waveHeight: 1.23,
                         windDirection: 61.49,
-                        windSpeed: 9.67
+                        windSpeed: 9.67,
                     },
-                ]
+                ],
             },
             {
-                time: "2022-01-20T01:00:00+00:00",
+                time: '2022-01-20T01:00:00+00:00',
                 forecast: [
                     {
                         lat: -33.792726,
@@ -54,16 +54,16 @@ describe('Forecast Services', () => {
                         swellDirection: 164.22,
                         swellHeight: 0.32,
                         swellPeriod: 11.62,
-                        time: "2022-01-20T01:00:00+00:00",
+                        time: '2022-01-20T01:00:00+00:00',
                         waveDirection: 86.87,
                         waveHeight: 1.19,
                         windDirection: 58.57,
-                        windSpeed: 9.06
+                        windSpeed: 9.06,
                     },
-                ]
+                ],
             },
             {
-                time: "2022-01-20T02:00:00+00:00",
+                time: '2022-01-20T02:00:00+00:00',
                 forecast: [
                     {
                         lat: -33.792726,
@@ -74,14 +74,14 @@ describe('Forecast Services', () => {
                         swellDirection: 164.24,
                         swellHeight: 0.32,
                         swellPeriod: 11.55,
-                        time: "2022-01-20T02:00:00+00:00",
+                        time: '2022-01-20T02:00:00+00:00',
                         waveDirection: 86.82,
                         waveHeight: 1.14,
                         windDirection: 55.66,
-                        windSpeed: 8.46
+                        windSpeed: 8.46,
                     },
-                ]
-            }
+                ],
+            },
         ];
         const forecast = new forecast_1.Forecast(mockedStormGlassSErvice);
         const beachesWithRatings = await forecast.processForecastForBeaches(beaches);
@@ -96,11 +96,10 @@ describe('Forecast Services', () => {
         const beaches = [
             {
                 name: 'Manly',
-                position: forecast_1.BeachPosition.E,
+                position: beach_1.BeachPosition.E,
                 lat: -33.792726,
                 lng: 151.289824,
-                user: 'some-id'
-            }
+            },
         ];
         mockedStormGlassSErvice.fetchPoints.mockRejectedValue('Error fetching data');
         const forecast = new forecast_1.Forecast(mockedStormGlassSErvice);

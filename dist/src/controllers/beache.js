@@ -8,32 +8,39 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ForecastController = void 0;
+exports.BeachesController = void 0;
 const core_1 = require("@overnightjs/core");
-const forecast_1 = require("@src/services/forecast");
 const beach_1 = require("@src/models/beach");
-const forecast = new forecast_1.Forecast();
-let ForecastController = class ForecastController {
-    async getForecastForLoggedUser(_, res) {
+const mongoose_1 = __importDefault(require("mongoose"));
+let BeachesController = class BeachesController {
+    async create(req, res) {
         try {
-            const beach = await beach_1.Beach.find({});
-            const forecastData = await forecast.processForecastForBeaches(beach);
-            res.status(200).send(forecastData);
+            const beach = new beach_1.Beach(req.body);
+            const result = await beach.save();
+            res.status(201).send(result);
         }
         catch (error) {
-            res.status(500).send({ error: "somethings went wrong" });
+            if (error instanceof mongoose_1.default.Error.ValidationError) {
+                res.status(422).send({ error: error.message });
+            }
+            else {
+                res.status(500).send({ error: error.message });
+            }
         }
     }
 };
 __decorate([
-    (0, core_1.Get)(''),
+    (0, core_1.Post)(''),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
-], ForecastController.prototype, "getForecastForLoggedUser", null);
-ForecastController = __decorate([
-    (0, core_1.Controller)('forecast')
-], ForecastController);
-exports.ForecastController = ForecastController;
-//# sourceMappingURL=forecast.js.map
+], BeachesController.prototype, "create", null);
+BeachesController = __decorate([
+    (0, core_1.Controller)('beaches')
+], BeachesController);
+exports.BeachesController = BeachesController;
+//# sourceMappingURL=beache.js.map
