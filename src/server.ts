@@ -3,6 +3,7 @@ import './util/module-alias';
 import bodyParser from 'body-parser';
 import { ForecastController } from './controllers/forecast';
 import { BeachesController } from './controllers/beache';
+import { UsersController } from '@src/controllers/users';
 import { Application } from 'express';
 import * as database from '@src/util/database';
 
@@ -26,7 +27,16 @@ export class SetupServer extends Server {
   private setupControllers(): void {
     const forecastController = new ForecastController();
     const beachesController = new BeachesController();
-    this.addControllers([forecastController, beachesController]);
+    const usersController = new UsersController();
+    this.addControllers([
+      forecastController,
+      beachesController,
+      usersController,
+    ]);
+  }
+
+  public getApp(): Application {
+    return this.app;
   }
   //cria o setup do DB ;
   private async setupDatabase(): Promise<void> {
@@ -38,7 +48,10 @@ export class SetupServer extends Server {
     await database.close();
   }
 
-  public getApp(): Application {
-    return this.app;
+  //Inicializar a applicação
+  public start(): void {
+    this.app.listen(this.port, () => {
+      console.info('Server listening of port', this.port);
+    });
   }
 }
