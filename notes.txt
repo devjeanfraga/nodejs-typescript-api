@@ -72,4 +72,5 @@
     // NÃO É UMA BOA PRÁTICA!!!
 
 
-
+  comando usado no início do propjeto para se fazer os tests(package.json)
+  // "test": "echo \"Error: no test specified\" && exit 1",
