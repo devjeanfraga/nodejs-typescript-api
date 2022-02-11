@@ -72,5 +72,23 @@
     // NÃO É UMA BOA PRÁTICA!!!
 
 
-  comando usado no início do propjeto para se fazer os tests(package.json)
-  // "test": "echo \"Error: no test specified\" && exit 1",
+    comando usado no início do propjeto para se fazer os tests(package.json)
+    // "test": "echo \"Error: no test specified\" && exit 1",
+
+    //* ***PROTECTED*** */
+    // Significa que quem estender esta class poderá sobreescrever o método
+    // Esse método poderá ser usado dentro da classe mas não estará visível
+    // fora da class para ser usado deverá ser extendido.
+
+    //* ***Abstract*** */
+        Uma class Abstract NÃO PODE SER IMPLEMENTADA, ou seja, vc não pode dar um
+        "new" nela, pode apenas ser expendida.
+        impede que seja inicializada. 
+
+    *** MongooseError !== MongoError ***
+        Tentei fazer um test de email duplicado no db com o Mongoose por meio do "unique"
+        depois de fazer alguns tratamentos, notei que o erro retornado não era do mongoose
+        e sim do MOngoDB. O mongoose joga a validação. 
+        O modo instruido apresentado foi de desenvolver um método que me faça essa validação
+        e me retorne um erro que meu tratamento conheça, ou seja,uma camada de proteção para 
+        evitar que a validação seja feita por terceiros. 
