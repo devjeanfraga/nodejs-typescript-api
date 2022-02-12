@@ -32,7 +32,7 @@ describe('Beach forecast fucntional', () => {
             lat: -33.792726,
             lng: 151.289824,
             params: /(.*)/,
-            source: 'noaa'
+            source: 'noaa',
         })
             .reply(200, stormGlass_weather_3_hours_json_1.default);
         const { body, status } = await global.testRequest.get('/forecast');
@@ -48,7 +48,7 @@ describe('Beach forecast fucntional', () => {
         })
             .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
             .get('/v2/weather/point')
-            .query({ lat: -33.792726, lng: 151.289824, })
+            .query({ lat: -33.792726, lng: 151.289824 })
             .replyWithError('Something went wrong');
         const { status } = await global.testRequest.get('/forecast');
         expect(status).toBe(500);

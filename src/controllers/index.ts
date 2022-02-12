@@ -7,9 +7,13 @@ import { CUSTOM_VALIDATION } from '@src/models/users';
 import { Response } from 'express';
 import mongoose from 'mongoose';
 
-
+export interface ResponseHandleError {
+  code: number;
+  erro: string;
+}
 
 export abstract class BaseController {
+  
   protected sendCreatedUpdateDataResponse(
     res: Response,
     error: unknown

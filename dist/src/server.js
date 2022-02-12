@@ -28,6 +28,7 @@ require("./util/module-alias");
 const body_parser_1 = __importDefault(require("body-parser"));
 const forecast_1 = require("./controllers/forecast");
 const beache_1 = require("./controllers/beache");
+const users_1 = require("@src/controllers/users");
 const database = __importStar(require("@src/util/database"));
 class SetupServer extends core_1.Server {
     constructor(port = 3000) {
@@ -45,7 +46,12 @@ class SetupServer extends core_1.Server {
     setupControllers() {
         const forecastController = new forecast_1.ForecastController();
         const beachesController = new beache_1.BeachesController();
-        this.addControllers([forecastController, beachesController]);
+        const usersController = new users_1.UsersController();
+        this.addControllers([
+            forecastController,
+            beachesController,
+            usersController,
+        ]);
     }
     getApp() {
         return this.app;
@@ -58,7 +64,7 @@ class SetupServer extends core_1.Server {
     }
     start() {
         this.app.listen(this.port, () => {
-            console.info("Server listening of port", this.port);
+            console.info('Server listening of port', this.port);
         });
     }
 }

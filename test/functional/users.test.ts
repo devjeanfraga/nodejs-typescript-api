@@ -1,4 +1,5 @@
 import { User } from '@src/models/users';
+import AuthServices from '@src/services/auth';
 
 describe('Users functional tests', () => {
   beforeAll(async () => await User.deleteMany({}));
@@ -12,8 +13,16 @@ describe('Users functional tests', () => {
       };
 
       const response = await global.testRequest.post('/users').send(newUser);
+      
       expect(response.status).toBe(201);
-      expect(response.body).toEqual(expect.objectContaining(newUser));
+      console.log(response.body)
+      await expect(AuthServices.comparePasword(newUser.password, response.body.password)).resolves.toBeTruthy(); //toBeTruthy trabalha com boolean em boolean
+      expect(response.body).toEqual(expect.objectContaining(
+        { 
+          ...newUser, 
+          ...{password: expect.any(String)}
+        })
+      );
     });
 
     it('Should return 422 when there is a validation Error', async () => {

@@ -9,31 +9,30 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ForecastController = void 0;
+exports.UsersController = void 0;
 const core_1 = require("@overnightjs/core");
-const forecast_1 = require("@src/services/forecast");
-const beach_1 = require("@src/models/beach");
-const forecast = new forecast_1.Forecast();
-let ForecastController = class ForecastController {
-    async getForecastForLoggedUser(_, res) {
+const _1 = require(".");
+const users_1 = require("../models/users");
+let UsersController = class UsersController extends _1.BaseController {
+    async create(req, res) {
         try {
-            const beach = await beach_1.Beach.find({});
-            const forecastData = await forecast.processForecastForBeaches(beach);
-            res.status(200).send(forecastData);
+            const user = new users_1.User(req.body);
+            const newUser = await user.save();
+            res.status(201).send(newUser);
         }
         catch (error) {
-            res.status(500).send({ error: 'somethings went wrong' });
+            this.sendCreatedUpdateDataResponse(res, error);
         }
     }
 };
 __decorate([
-    (0, core_1.Get)(''),
+    (0, core_1.Post)(''),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
-], ForecastController.prototype, "getForecastForLoggedUser", null);
-ForecastController = __decorate([
-    (0, core_1.Controller)('forecast')
-], ForecastController);
-exports.ForecastController = ForecastController;
-//# sourceMappingURL=forecast.js.map
+], UsersController.prototype, "create", null);
+UsersController = __decorate([
+    (0, core_1.Controller)('users')
+], UsersController);
+exports.UsersController = UsersController;
+//# sourceMappingURL=users.js.map
