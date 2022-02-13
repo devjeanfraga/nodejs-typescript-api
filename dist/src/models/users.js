@@ -26,12 +26,7 @@ const schema = new mongoose_1.default.Schema({
             delete ret._v;
         },
     },
-});
-schema.path('email').validate(async (email) => {
-    const emailCount = await mongoose_1.default.models.User.countDocuments({ email });
-    return !emailCount;
-}, 'already exists in the database', CUSTOM_VALIDATION.DUPLICATED);
-schema.pre('save', async function (next) {
+}).pre('save', async function (next) {
     if (this.password || this.isModified('password')) {
         return;
     }
@@ -39,6 +34,7 @@ schema.pre('save', async function (next) {
         try {
             const passwordHash = await auth_1.default.hashPassword(this.password);
             this.password = passwordHash;
+            console.log(`log do model: ${this.password}`);
             next;
         }
         catch (error) {
@@ -46,5 +42,9 @@ schema.pre('save', async function (next) {
         }
     }
 });
+schema.path('email').validate(async (email) => {
+    const emailCount = await mongoose_1.default.models.User.countDocuments({ email });
+    return !emailCount;
+}, 'already exists in the database', CUSTOM_VALIDATION.DUPLICATED);
 exports.User = mongoose_1.default.model('User', schema);
 //# sourceMappingURL=users.js.map
