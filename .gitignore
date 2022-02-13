@@ -63,3 +63,8 @@ typings/
 
 # typescript compiled code
 distd
+
+# outhers
+yarn.lock
+
+**.map
