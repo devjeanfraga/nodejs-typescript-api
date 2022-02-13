@@ -40,13 +40,13 @@ const schema = new mongoose.Schema(
     },
   }
 ).pre<UserModel>('save', async function (next): Promise<void> {
-  if(this.password || this.isModified('password')) {
+  if(!this.password || !this.isModified('password')) { // ?Não tem o campo ou ele nao foi modificado ! = Falsopois tem o campo e ele foi modificado
     return;
   } else {
     try{
       const passwordHash = await AuthServices.hashPassword(this.password);
       this.password = passwordHash
-      console.log(`log do model: ${this.password}`);
+     
       next;
     }catch(error) {
       console.log(`Error hashing the password for the user ${this.name}`);
