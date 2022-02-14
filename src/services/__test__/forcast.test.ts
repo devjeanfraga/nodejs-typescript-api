@@ -9,9 +9,10 @@ jest.mock('@src/clients/stormGlass');
 describe('Forecast Services', () => {
   const mockedStormGlassSErvice = new StormGlass() as jest.Mocked<StormGlass>;
   it('Shoud return the forecast for a list of beaches', async () => {
-    mockedStormGlassSErvice.fetchPoints.mockResolvedValue(
-      stormGlassNormalizedResponseFixture
-    );
+    mockedStormGlassSErvice
+      .fetchPoints.mockResolvedValue(
+        stormGlassNormalizedResponseFixture
+      );
     const beaches: Beach[] = [
       {
         name: 'Manly',
