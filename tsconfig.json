@@ -24,7 +24,7 @@
     },
     "rootDirs": [
       "./src",
-      "./tes"
+      "./test"
     ],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,

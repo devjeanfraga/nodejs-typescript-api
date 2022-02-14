@@ -16,10 +16,11 @@ exports.BeachesController = void 0;
 const core_1 = require("@overnightjs/core");
 const beach_1 = require("@src/models/beach");
 const mongoose_1 = __importDefault(require("mongoose"));
+const auth_1 = require("@src/middlewares/auth");
 let BeachesController = class BeachesController {
     async create(req, res) {
         try {
-            const beach = new beach_1.Beach(req.body);
+            const beach = new beach_1.Beach({ ...req.body, ...{ user: req.decoded?.id } });
             const result = await beach.save();
             res.status(201).send(result);
         }
@@ -40,7 +41,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], BeachesController.prototype, "create", null);
 BeachesController = __decorate([
-    (0, core_1.Controller)('beaches')
+    (0, core_1.Controller)('beaches'),
+    (0, core_1.ClassMiddleware)(auth_1.authMiddleware)
 ], BeachesController);
 exports.BeachesController = BeachesController;
 //# sourceMappingURL=beache.js.map

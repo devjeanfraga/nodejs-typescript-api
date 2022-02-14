@@ -12,13 +12,15 @@ jest.mock('@src/clients/stormGlass');
 describe('Forecast Services', () => {
     const mockedStormGlassSErvice = new stormGlass_1.StormGlass();
     it('Shoud return the forecast for a list of beaches', async () => {
-        mockedStormGlassSErvice.fetchPoints.mockResolvedValue(stormGlass_normalized_response_3_hours_json_1.default);
+        mockedStormGlassSErvice
+            .fetchPoints.mockResolvedValue(stormGlass_normalized_response_3_hours_json_1.default);
         const beaches = [
             {
                 name: 'Manly',
                 position: beach_1.BeachPosition.E,
                 lat: -33.792726,
                 lng: 151.289824,
+                user: 'id-fake',
             },
         ];
         const expectedResponse = [
@@ -99,6 +101,7 @@ describe('Forecast Services', () => {
                 position: beach_1.BeachPosition.E,
                 lat: -33.792726,
                 lng: 151.289824,
+                user: 'id-fake',
             },
         ];
         mockedStormGlassSErvice.fetchPoints.mockRejectedValue('Error fetching data');

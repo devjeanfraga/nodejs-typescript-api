@@ -16,11 +16,10 @@ describe('Users functional tests', () => {
             };
             const response = await global.testRequest.post('/users').send(newUser);
             expect(response.status).toBe(201);
-            console.log(response.body);
             await expect(auth_1.default.comparePasword(newUser.password, response.body.password)).resolves.toBeTruthy();
             expect(response.body).toEqual(expect.objectContaining({
                 ...newUser,
-                ...{ password: expect.any(String) }
+                ...{ password: expect.any(String) },
             }));
         });
         it('Should return 422 when there is a validation Error', async () => {
@@ -47,6 +46,44 @@ describe('Users functional tests', () => {
                 code: 409,
                 error: 'User validation failed: email: already exists in the database',
             });
+        });
+    });
+    describe('When Authentication an User', () => {
+        it('Should return a token for a valid user', async () => {
+            const newUser = {
+                name: 'Saturno',
+                email: 'Saturno@jupiter.com',
+                password: '123456',
+            };
+            await new users_1.User(newUser).save();
+            const response = await global.testRequest
+                .post('/users/authenticate')
+                .send({
+                email: newUser.email,
+                password: newUser.password,
+            });
+            expect(response.body).toEqual(expect.objectContaining({ token: expect.any(String) }));
+        });
+        it('Should return UNAUTHORIZED Error with status 401', async () => {
+            const response = await global.testRequest
+                .post('/users/authenticate')
+                .send({ email: 'jean@jean', password: '827892402' });
+            expect(response.status).toBe(401);
+        });
+        it('Should return UNAUTHORIZED if find an user but the password doesnt match', async () => {
+            const newUser = {
+                name: 'Domingo',
+                email: 'domingo@jupiter.com',
+                password: '123456',
+            };
+            await new users_1.User(newUser).save();
+            const response = await global.testRequest
+                .post('/users/authenticate')
+                .send({
+                email: newUser.email,
+                password: '3847rnbdwe',
+            });
+            expect(response.status).toBe(401);
         });
     });
 });

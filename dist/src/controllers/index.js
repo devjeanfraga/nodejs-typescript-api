@@ -18,10 +18,9 @@ class BaseController {
     }
     handleClientErrors(error, res) {
         Object.values(error.errors).filter((err) => {
-            err.name === 'ValidatorError' &&
-                err.kind === users_1.CUSTOM_VALIDATION.DUPLICATED
-                ? res = res.status(409).send({ code: 409, error: error.message })
-                : res = res.status(422).send({ code: 422, error: error.message });
+            err.name === 'ValidatorError' && err.kind === users_1.CUSTOM_VALIDATION.DUPLICATED
+                ? (res = res.status(409).send({ code: 409, error: error.message }))
+                : (res = res.status(422).send({ code: 422, error: error.message }));
         });
         return res;
     }

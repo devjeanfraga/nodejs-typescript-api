@@ -27,14 +27,13 @@ const schema = new mongoose_1.default.Schema({
         },
     },
 }).pre('save', async function (next) {
-    if (this.password || this.isModified('password')) {
+    if (!this.password || !this.isModified('password')) {
         return;
     }
     else {
         try {
             const passwordHash = await auth_1.default.hashPassword(this.password);
             this.password = passwordHash;
-            console.log(`log do model: ${this.password}`);
             next;
         }
         catch (error) {
