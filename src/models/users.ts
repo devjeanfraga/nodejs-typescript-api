@@ -1,11 +1,7 @@
-import mongoose, { Document, Model  } from 'mongoose';
+import mongoose, { Document, Model } from 'mongoose';
 import AuthServices from '@src/services/auth';
 
 // *** Criar o hash da password ***
-
-
-
-
 
 export interface User {
   _id: string;
@@ -40,23 +36,22 @@ const schema = new mongoose.Schema(
     },
   }
 ).pre<UserModel>('save', async function (next): Promise<void> {
-  if(!this.password || !this.isModified('password')) { // ?Não tem o campo ou ele nao foi modificado ! = Falsopois tem o campo e ele foi modificado
+  if (!this.password || !this.isModified('password')) {
+    // ?Não tem o campo ou ele nao foi modificado ! = Falsopois tem o campo e ele foi modificado
     return;
   } else {
-    try{
+    try {
       const passwordHash = await AuthServices.hashPassword(this.password);
-      this.password = passwordHash
-     
+      this.password = passwordHash;
+
       next;
-    }catch(error) {
+    } catch (error) {
       console.log(`Error hashing the password for the user ${this.name}`);
     }
   }
-
-  
 });
 
-// ***Verificar se o email já existe*** 
+// ***Verificar se o email já existe***
 // Schema personalizado para verificar se o campo existe no DB
 // o validate do mongoose possui uma assinatura que permite inputar o type o error;
 // basta dar um console.log no erro para verificar o campo kind.
@@ -71,13 +66,5 @@ schema.path('email').validate(
 // Usando a async function para pegar o this do escopo local da function
 // com o arrow function isso não é possivel
 // a não ser que queira algo do escopo global;
-
-
-
-
-
-
-
-
 
 export const User: Model<UserModel> = mongoose.model('User', schema);

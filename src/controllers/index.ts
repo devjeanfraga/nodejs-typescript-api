@@ -13,52 +13,40 @@ export interface ResponseHandleError {
 }
 
 export abstract class BaseController {
-  
   protected sendCreatedUpdateDataResponse(
     res: Response,
     error: unknown
   ): Response {
     if (error instanceof mongoose.Error.ValidationError) {
-      this.handleClientErrors(error , res);
+      this.handleClientErrors(error, res);
       return res;
-              
     } else {
       return res.status(500).send({ code: 500, error: 'Something went wrong' });
     }
   }
 
-  private handleClientErrors (error: mongoose.Error.ValidationError , res: Response): Response {
-    
-    Object.values(error.errors).filter((err)=> {
-      err.name ==='ValidatorError' &&
-      err.kind === CUSTOM_VALIDATION.DUPLICATED
-        ? res = res.status(409).send({ code: 409, error: error.message })
-        : res = res.status(422).send({ code: 422, error: error.message });
+  private handleClientErrors(
+    error: mongoose.Error.ValidationError,
+    res: Response
+  ): Response {
+    Object.values(error.errors).filter((err) => {
+      err.name === 'ValidatorError' && err.kind === CUSTOM_VALIDATION.DUPLICATED
+        ? (res = res.status(409).send({ code: 409, error: error.message }))
+        : (res = res.status(422).send({ code: 422, error: error.message }));
     });
     return res;
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
 //Object.values(error.errors).filter((err) => {
-  //err.name === 'ValidatorError' &&
-  //err.kind === CUSTOM_VALIDATION.DUPLICATED
-    //? (res = res.status(409).send({ code: 409, error: error.message }))
-    //: (res = res.status(422).send({ code: 422, error: error.message }));
+//err.name === 'ValidatorError' &&
+//err.kind === CUSTOM_VALIDATION.DUPLICATED
+//? (res = res.status(409).send({ code: 409, error: error.message }))
+//: (res = res.status(422).send({ code: 422, error: error.message }));
 //});
 //return res
 
 //const {code , erro } = this.handleClientErrors(error);
 //return res
-        //.status(code)
-        //.send(erro);
+//.status(code)
+//.send(erro);

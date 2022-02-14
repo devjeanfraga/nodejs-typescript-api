@@ -4,7 +4,6 @@ import { BaseController } from '.';
 import { User } from '../models/users';
 import AuthServices from '@src/services/auth';
 
-
 @Controller('users')
 export class UsersController extends BaseController {
   @Post('')
@@ -14,29 +13,31 @@ export class UsersController extends BaseController {
       const newUser = await user.save();
       res.status(201).send(newUser);
     } catch (error) {
-       this.sendCreatedUpdateDataResponse(res, error);
-       
+      this.sendCreatedUpdateDataResponse(res, error);
     }
   }
 
   @Post('authenticate')
-  public async authenticate(req: Request, res: Response): Promise<Response | undefined > {
+  public async authenticate(
+    req: Request,
+    res: Response
+  ): Promise<Response | undefined> {
     const { email, password } = req.body;
     const user = await User.findOne({ email: email });
-    if(!user) {
+    if (!user) {
       return res.status(401).send({
         code: 401,
-        error: 'UNAUTHORIZED'
+        error: 'UNAUTHORIZED',
       });
     }
-    if(!(await AuthServices.comparePasword(password, user.password)) ) {
+    if (!(await AuthServices.comparePasword(password, user.password))) {
       return res.status(401).send({
         code: 401,
-        error: 'UNAUTHORIZED'
+        error: 'UNAUTHORIZED',
       });
     } else {
-      const token =  AuthServices.generateToken(user.toJSON());
-      return res.status(200).send({token: token});
+      const token = AuthServices.generateToken(user.toJSON());
+      return res.status(200).send({ token: token });
     }
   }
 }

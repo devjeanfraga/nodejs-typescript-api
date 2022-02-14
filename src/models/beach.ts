@@ -14,7 +14,6 @@ export interface Beach {
   lat: number;
   lng: number;
   user: string;
-
 }
 
 const schema = new Schema(
@@ -23,7 +22,7 @@ const schema = new Schema(
     lng: { type: Number, required: true },
     name: { type: String, required: true },
     position: { type: String, required: true },
-    user: {type: Schema.Types.ObjectId, ref: 'User', required: true }
+    user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   },
   {
     //formataçoes da transformaçao final dos dados, substituinbdo _id do mongoDB  por id

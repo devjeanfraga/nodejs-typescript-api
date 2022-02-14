@@ -15,7 +15,7 @@ export class ForecastController {
     res: Response
   ): Promise<void> {
     try {
-      const beach = await Beach.find({user: req.decoded?.id });
+      const beach = await Beach.find({ user: req.decoded?.id });
       const forecastData = await forecast.processForecastForBeaches(beach);
 
       res.status(200).send(forecastData);

@@ -2,7 +2,6 @@ import { Beach } from '@src/models/beach';
 import { User } from '@src/models/users';
 import AuthServices from '@src/services/auth';
 
-
 describe('Beaches functional test', () => {
   /* ***Default Config*** 
   # Cria um usuário padrão
@@ -15,19 +14,19 @@ describe('Beaches functional test', () => {
   */
 
   const defaultUser = {
-    name: "Saturno",
-    email: "saturno@gmail",
-    password: "saturno25"
-  }
+    name: 'Saturno',
+    email: 'saturno@gmail',
+    password: 'saturno25',
+  };
   let token: string;
   beforeEach(async () => {
     await Beach.deleteMany({});
     await User.deleteMany({});
     const user = await new User(defaultUser).save();
     token = AuthServices.generateToken(user.toJSON());
-    // O usuário deve ser em  
+    // O usuário deve ser em
     // json para que seja um objeto
-  }); 
+  });
 
   describe('When create a beach', () => {
     it('Should create a beach with success', async () => {
@@ -38,16 +37,15 @@ describe('Beaches functional test', () => {
         lng: 151.289824,
       };
 
-      const response = await global
-        .testRequest
+      const response = await global.testRequest
         .post('/beaches')
-        .set({'x-access-token': token})
+        .set({ 'x-access-token': token })
         .send(newBeach);
 
       expect(response.status).toBe(201);
       expect(response.body).toEqual(expect.objectContaining(newBeach));
-      // Para o expect.objectContaining() 
-      // basta que tenha essas chaves do 
+      // Para o expect.objectContaining()
+      // basta que tenha essas chaves do
       // newBeache dentro do objeto, mesmo
       // tendo outras chaves dentro
       // do objeto como o Id que é dinamico;
@@ -61,10 +59,9 @@ describe('Beaches functional test', () => {
         lng: 151.289824,
       };
 
-      const response = await global
-        .testRequest
+      const response = await global.testRequest
         .post('/beaches')
-        .set({'x-access-token': token})
+        .set({ 'x-access-token': token })
         .send(newBeach);
 
       expect(response.status).toBe(422);

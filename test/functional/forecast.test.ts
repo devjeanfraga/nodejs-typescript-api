@@ -8,10 +8,10 @@ import AuthServices from '@src/services/auth';
 
 describe('Beach forecast fucntional', () => {
   const defaultUser = {
-    name: "Saturno",
-    email: "saturno@gmail",
-    password: "saturno25"
-  }
+    name: 'Saturno',
+    email: 'saturno@gmail',
+    password: 'saturno25',
+  };
 
   let token: string;
 
@@ -24,11 +24,11 @@ describe('Beach forecast fucntional', () => {
       lng: 151.289824,
       name: 'Manly',
       position: BeachPosition.E,
-      user: user.id
+      user: user.id,
     };
     token = AuthServices.generateToken(user.toJSON());
     new Beach(defaultBeach).save();
-    // O usuário deve ser em  
+    // O usuário deve ser em
     // json para que seja um objeto
   });
 
@@ -50,11 +50,10 @@ describe('Beach forecast fucntional', () => {
       })
       .reply(200, StormGlassWeather3HoursFixture);
 
-    const { body, status } = await global
-      .testRequest
+    const { body, status } = await global.testRequest
       .get('/forecast')
-      .set({'x-access-token': token});
-    
+      .set({ 'x-access-token': token });
+
     expect(status).toBe(200);
     // Certifique-se de usar toEqual
     // para verificar o valor e não o
@@ -74,10 +73,9 @@ describe('Beach forecast fucntional', () => {
       .query({ lat: -33.792726, lng: 151.289824 })
       .replyWithError('Something went wrong');
 
-    const { status } = await global
-      .testRequest
+    const { status } = await global.testRequest
       .get('/forecast')
-      .set({'x-access-token': token })
+      .set({ 'x-access-token': token });
     expect(status).toBe(500);
   });
 });
