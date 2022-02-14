@@ -3,19 +3,33 @@ import { Beach, BeachPosition } from '@src/models/beach';
 import nock from 'nock';
 import StormGlassWeather3HoursFixture from '@test/fixtures/stormGlass_weather_3_hours.json';
 import ApiForecastResponse1BeachFixture from '@test/fixtures/api_forecast_response_1_beach.json';
+import { User } from '@src/models/users';
+import AuthServices from '@src/services/auth';
 
 describe('Beach forecast fucntional', () => {
+  const defaultUser = {
+    name: "Saturno",
+    email: "saturno@gmail",
+    password: "saturno25"
+  }
+
+  let token: string;
+
   beforeEach(async () => {
     await Beach.deleteMany({});
+    await User.deleteMany({});
+
     const defaultBeach = {
       name: 'Manly',
       position: BeachPosition.E,
       lat: -33.792726,
       lng: 151.289824,
     };
-
-    const beach = new Beach(defaultBeach);
-    await beach.save();
+    new Beach(defaultBeach).save();
+    const user = await new User(defaultUser).save();
+    token = AuthServices.generateToken(user.toJSON());
+    // O usuário deve ser em  
+    // json para que seja um objeto
   });
 
   it('should return a forecast with just a few times', async () => {
