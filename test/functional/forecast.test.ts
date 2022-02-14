@@ -18,16 +18,16 @@ describe('Beach forecast fucntional', () => {
   beforeEach(async () => {
     await Beach.deleteMany({});
     await User.deleteMany({});
-
+    const user = await new User(defaultUser).save();
     const defaultBeach = {
-      name: 'Manly',
-      position: BeachPosition.E,
       lat: -33.792726,
       lng: 151.289824,
+      name: 'Manly',
+      position: BeachPosition.E,
+      user: user.id
     };
-    new Beach(defaultBeach).save();
-    const user = await new User(defaultUser).save();
     token = AuthServices.generateToken(user.toJSON());
+    new Beach(defaultBeach).save();
     // O usuário deve ser em  
     // json para que seja um objeto
   });
@@ -49,9 +49,16 @@ describe('Beach forecast fucntional', () => {
         source: 'noaa',
       })
       .reply(200, StormGlassWeather3HoursFixture);
-    const { body, status } = await global.testRequest.get('/forecast');
+
+    const { body, status } = await global
+      .testRequest
+      .get('/forecast')
+      .set({'x-access-token': token});
+    
     expect(status).toBe(200);
-    //Make sure we use toEqual to check value not the object and array itself
+    // Certifique-se de usar toEqual
+    // para verificar o valor e não o
+    // objeto e o próprio array
     expect(body).toEqual(ApiForecastResponse1BeachFixture);
   });
 
@@ -67,7 +74,10 @@ describe('Beach forecast fucntional', () => {
       .query({ lat: -33.792726, lng: 151.289824 })
       .replyWithError('Something went wrong');
 
-    const { status } = await global.testRequest.get('/forecast');
+    const { status } = await global
+      .testRequest
+      .get('/forecast')
+      .set({'x-access-token': token })
     expect(status).toBe(500);
   });
 });
