@@ -4,8 +4,8 @@
   "description": "TypeScript Node.JS API",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
     "start": "node dist/src/index.js",
+    "build": "TSC",
     "start:dev": "ts-node-dev src/index.ts",
     "lint": "eslint  ./src ./test --ext .ts",
     "lint:fix": "eslint ./src ./test --ext .ts --fix",
@@ -15,7 +15,9 @@
     "style:check": "prettier --check src/**/*.ts test/**/*.ts",
     "style:fix": "prettier --write src/**/*.ts test/**/*.ts"
   },
-  "engines": {"node": "16.x"},
+  "engines": {
+    "node": "16.13.0"
+  },
   "repository": "https://github.com/JeanFragaJS/nodejs-typescript-api.git",
   "keywords": [
     "node.js",
@@ -56,7 +58,6 @@
     "express": "^4.17.2",
     "jsonwebtoken": "^8.5.1",
     "module-alias": "^2.2.2",
-    "mongoose": "^6.1.8",
-    "tsc": "^2.0.4"
+    "mongoose": "^6.1.8"
   }
 }
