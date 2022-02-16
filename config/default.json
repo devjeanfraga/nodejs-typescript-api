@@ -4,6 +4,10 @@
     "database": {
       "mongoURL": "mongodb://127.0.0.1:27017/surf-forecast"
     },
+    "auth": {
+      "key":"nlIm9m0Mq+ATFW+kmQno56rlnoirjfDXq2h86QMMRYlSOoHRV1CuU2OsH3PEdOqJaTVwvBnZtIPW/9M5vcQ/KCpxubMAvyqDl4tcZVWHmb19vTPs3dPGHwFvB7ueWp+5X6LBkRRcUIytSnphV4uOl6VXVsakM+ixTybzANMFEg4XVeiwIUWwBidufm1RrhNmmpa2IEHzp92h26qxXJ9ts2M7NhXm729lCvTJGrloJT/WN3lTj064kd2er9hmaNY3UdCdEyVLRxk8CxeGDqjUx3uqpNkmoPEL4UVHsGll+ba3Cq8q/5H96ilIj6Y0CVv4s4lsoPuC8NlHYV3cYfqxNA==",
+      "tokenexpiresIn": 20000000000
+    },
     "resources": {
       "StormGlass":{
         "apiURL": "https://api.stormglass.io/v2",
