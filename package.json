@@ -15,7 +15,7 @@
     "style:check": "prettier --check src/**/*.ts test/**/*.ts",
     "style:fix": "prettier --write src/**/*.ts test/**/*.ts"
   },
-  "engines": {"node": "16"},
+  "engines": {"node": "16.14.0"},
   "repository": "https://github.com/JeanFragaJS/nodejs-typescript-api.git",
   "keywords": [
     "node.js",
