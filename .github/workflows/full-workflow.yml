@@ -35,3 +35,12 @@ jobs:
 
     - name: Run all tests
       run: yarn test
+
+    - Deploy application
+      if: ${{github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'}}
+      uses: akhileshns/heroku-deploy@v3.12.12
+      with: 
+        heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+        heroku_app_name: "forecast-beach"
+        heroku_email: "jeanfragoli395@gmail.com"
+        buildpack: 
