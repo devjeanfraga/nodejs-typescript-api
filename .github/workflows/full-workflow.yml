@@ -36,7 +36,7 @@ jobs:
     - name: Run all tests
       run: yarn test
 
-    - Deploy application
+    - name: Deploy application
       if: ${{github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'}}
       uses: akhileshns/heroku-deploy@v3.12.12
       with: 
