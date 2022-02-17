@@ -1,7 +1,7 @@
 import config, { IConfig } from 'config';
 import { connect as mongooseConnect, connection } from 'mongoose';
 
-const dbConfig: IConfig = config.get('app.database');
+const dbConfig: IConfig = config.get('App.database');
 
 export const connect = async (): Promise<void> => {
   await mongooseConnect(dbConfig.get('mongoURL'));

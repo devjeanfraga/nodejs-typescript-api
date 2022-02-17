@@ -27,8 +27,7 @@ export class Forecast {
   ): Promise<TimeForecast[]> {
 
     logger.info(
-      `Preparando o forcast para ${Beach.length} praia(s) | Preparing the forecast for ${Beach.length} breach(s)
-      `);
+      `Preparing the forecast for ${Beach.length} breach (s)`);
     try {
       const pointsWithCorrectSources: BeachForecast[] = [];
       for (const beach of beaches) {
@@ -39,7 +38,6 @@ export class Forecast {
       }
       if(pointsWithCorrectSources.length === 0 ) {
         logger.error(Error);
-        throw new ForecastProcessInternalError('Erro na requisição')
       }
       return this.mapForecastByTime(pointsWithCorrectSources);
     } catch (error) {

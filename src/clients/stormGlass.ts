@@ -50,7 +50,7 @@ export class StormGlassResponseError extends InternalError {
 
 //Config
 const stormGlassRessourceConfig: IConfig = config.get(
-  'app.resources.StormGlass'
+  'App.resources.StormGlass'
 );
 
 //MAIN CLASS
