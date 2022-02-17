@@ -49,9 +49,7 @@ export class StormGlassResponseError extends InternalError {
 }
 
 //Config
-const stormGlassRessourceConfig: IConfig = config.get(
-  'App.resources.StormGlass'
-);
+const stormGlassRessourceConfig: IConfig = config.get('app.resources.StormGlass');
 
 //MAIN CLASS
 export class StormGlass {
@@ -64,11 +62,7 @@ export class StormGlass {
   public async fetchPoints(lat: number, lng: number): Promise<ForecastPoint[]> {
     try {
       const response = await this.request.get<StormGlassForecastResponse>(
-        `${stormGlassRessourceConfig.get(
-          'apiURL'
-        )}/weather/point?lat=${lat}&lng=${lng}&params=${
-          this.stormGlassAPIParams
-        }&source=${this.stormGlassAPISource}`,
+        `${stormGlassRessourceConfig.get('apiURL')}/weather/point?lat=${lat}&lng=${lng}&params=${this.stormGlassAPIParams}&source=${this.stormGlassAPISource}`,
         {
           headers: {
             Authorization: stormGlassRessourceConfig.get('apiToken'),

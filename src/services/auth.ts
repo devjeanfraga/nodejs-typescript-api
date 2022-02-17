@@ -22,13 +22,13 @@ export default class AuthServices {
   }
 
   public static generateToken(payload: object): string {
-    const token = jwt.sign(payload, config.get('App.auth.key'), {
-      expiresIn: config.get('App.auth.tokenexpiresIn'),
+    const token = jwt.sign(payload, config.get('app.auth.key'), {
+      expiresIn: config.get('app.auth.tokenexpiresIn'),
     });
     return token;
   }
 
   public static decodeToken(token: string): DecodedUser {
-    return jwt.verify(token, config.get('App.auth.key')) as DecodedUser;
+    return jwt.verify(token, config.get('app.auth.key')) as DecodedUser;
   }
 }

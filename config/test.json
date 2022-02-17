@@ -1,5 +1,5 @@
 {
-  "App": {
+  "app": {
     "resources": {
       "StormGlass": {
         "apiToken": "test-token"

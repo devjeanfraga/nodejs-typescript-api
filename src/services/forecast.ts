@@ -37,7 +37,7 @@ export class Forecast {
         pointsWithCorrectSources.push(...enrichedBeachData);
       }
       if(pointsWithCorrectSources.length === 0 ) {
-        logger.error(Error);
+        logger.error(InternalError);
       }
       return this.mapForecastByTime(pointsWithCorrectSources);
     } catch (error) {
