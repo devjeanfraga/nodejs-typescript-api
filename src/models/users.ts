@@ -1,5 +1,6 @@
 import mongoose, { Document, Model } from 'mongoose';
 import AuthServices from '@src/services/auth';
+import logger  from '@src/logger';
 
 // *** Criar o hash da password ***
 
@@ -46,7 +47,7 @@ const schema = new mongoose.Schema(
 
       next;
     } catch (error) {
-      console.log(`Error hashing the password for the user ${this.name}`);
+      logger.error(`Error hashing the password for the user ${this.name}`);
     }
   }
 });

@@ -36,6 +36,7 @@ export class UsersController extends BaseController {
         error: 'UNAUTHORIZED',
       });
     } else {
+      
       const token = AuthServices.generateToken(user.toJSON());
       return res.status(200).send({ token: token });
     }

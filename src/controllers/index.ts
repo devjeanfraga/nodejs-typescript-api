@@ -3,9 +3,11 @@
 // Esse método poderá ser usado dentro da classe mas não estará visível
 // fora da class para ser usado deverá ser extendido.
 
+import logger from '@src/logger';
 import { CUSTOM_VALIDATION } from '@src/models/users';
 import { Response } from 'express';
 import mongoose from 'mongoose';
+
 
 export interface ResponseHandleError {
   code: number;
@@ -20,7 +22,12 @@ export abstract class BaseController {
     if (error instanceof mongoose.Error.ValidationError) {
       this.handleClientErrors(error, res);
       return res;
+
     } else {
+      //ADD ERROR BY PINO 
+      logger.error(error);
+   
+    
       return res.status(500).send({ code: 500, error: 'Something went wrong' });
     }
   }
