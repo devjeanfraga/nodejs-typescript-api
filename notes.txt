@@ -1,5 +1,5 @@
 
-***Supertest***
+*** Supertest ***
   É um módulo que forja requisições visando testar webservers em Node.
   js e verifica o retorno das mesmas para automatizar testes deste tipo de infraestrutura,
   principalmente web APIs.
@@ -7,80 +7,80 @@
   instalação: yarn add -D supertest @types/supertest
 
 
-***Jest***
+*** Jest ***
   Jest é um framework de teste unitário de código aberto em JavaScript criado pelo Facebook a partir do framework Jasmine
   O jest por padrão roda em paralelo,
   mas com o < --runInBand > roda em ordem (um depois do outro), aconselhado para tests funcionais ( de unidade). 
   https://jestjs.io/pt-BR/
   
 
-  ***Observação***
+  *** Observação ***
     Client na aqruitetura do código será a unidade responsável por se comunicar com os serviços externos
     ex: outras APIs.
 
-  ***mocks e stubs***
+  *** mocks e stubs ***
     Usamos o mock quando queremos saber se uma função vai ser chamada corretamente,
     quantas vezes ela vai ser chamada, se os parâmetros esperados são os corretos, 
     já o stub vai nos dizer se o resultado do código retorna de acordo com os parâmetros passado, 
     se retorna sucesso, erro ou exceção por exemplo, é previsível.
 
-  ***Fixtures***
+  *** Fixtures ***
     A pasta fixtures significa acessórios, e o arquivo "stormGlass_weather_3_hours.json" funcionais
     foi colocado na pasta de test de integração porque será usado alí também. 
 
-  ***Bug de Tipagem***
-  catch(err: unknown) {
-     throw new Error(
-           `Unexpected error when trying to communicate to StormGlass: 
-            ${(err as Error).message}`
-     );      
- } 
+  *** Bug de Tipagem ***
+    catch(err: unknown) {
+      throw new Error(
+            `Unexpected error when trying to communicate to StormGlass: 
+              ${(err as Error).message}`
+      );      
+  } 
 
 
-  ***Desacoplamento***
+  *** Desacoplamento ***
   No src/util/Request.ts 
-  -fizemos uma classe que 'imita o que o axios faz',
-  -o construtor requebe o axios ou qualquer outro pg como Request
-  -criamos um método get que tem um tipo generic <T>
-  -O get recebe os mesmo params do get do axios
-  - esses parametros tem tipagens do proprio axios
-  -Extendemos essas tipagens que sao interfaces para nossas interfaces
-  -E nossas interfaces viram tipagens do nossos params 
+    -fizemos uma classe que 'imita o que o axios faz',
+    -o construtor requebe o axios ou qualquer outro pg como Request
+    -criamos um método get que tem um tipo generic <T>
+    -O get recebe os mesmo params do get do axios
+    - esses parametros tem tipagens do proprio axios
+    -Extendemos essas tipagens que sao interfaces para nossas interfaces
+    -E nossas interfaces viram tipagens do nossos params 
 
-    EX: 
-    export interface RequestConfig  extends AxiosRequestConfig {}
-    ...
-    public get<T>(url:string, config: RequestConfig = {})
-  - o return será uma Promisse com o tipo AxiosResponse desacoplada
-    e extendida na nossa interface Response que por sua vez terá o tipo T generic
-    
-    EX: 
-    export interface Response<T = any > extends AxiosResponse<T> {}
-    Promise<Response<T>>
-  - por fim, podemos dar um return acessando a class e o método get 
-    passando os tipos do método que será T generic e Response o qual terá T
-    generic como tipo tbm; 
+      EX: 
+      export interface RequestConfig  extends AxiosRequestConfig {}
+      ...
+      public get<T>(url:string, config: RequestConfig = {})
+    - o return será uma Promisse com o tipo AxiosResponse desacoplada
+      e extendida na nossa interface Response que por sua vez terá o tipo T generic
+      
+      EX: 
+      export interface Response<T = any > extends AxiosResponse<T> {}
+      Promise<Response<T>>
+    - por fim, podemos dar um return acessando a class e o método get 
+      passando os tipos do método que será T generic e Response o qual terá T
+      generic como tipo tbm; 
 
-    EX:
-    return this.request.get<T, Response<T>>(url, config);
+      EX:
+      return this.request.get<T, Response<T>>(url, config);
 
   - *** Acesando methods por meio de prototype ***
-    EX : StormGlass.prototype.fetchPoints = jest.fn().mockResolvedValue(stormGlassNormalizedResponseFixture);
-    // mockando métodos por meio de prototype (substituindo o fetchPoints Method pelo method do jest);
-    // Se como para acessar o método temo que dar o new na class
-    // nesse caso podemos substituir o metodo fetchPoints sem acessar o new por meio do prototype
-    // NÃO É UMA BOA PRÁTICA!!!
+      EX : StormGlass.prototype.fetchPoints = jest.fn().mockResolvedValue(stormGlassNormalizedResponseFixture);
+      // mockando métodos por meio de prototype (substituindo o fetchPoints Method pelo method do jest);
+      // Se como para acessar o método temo que dar o new na class
+      // nesse caso podemos substituir o metodo fetchPoints sem acessar o new por meio do prototype
+      // NÃO É UMA BOA PRÁTICA!!!
 
 
-    comando usado no início do propjeto para se fazer os tests(package.json)
-    // "test": "echo \"Error: no test specified\" && exit 1",
+      comando usado no início do propjeto para se fazer os tests(package.json)
+      // "test": "echo \"Error: no test specified\" && exit 1",
 
-    //* ***PROTECTED*** */
-    // Significa que quem estender esta class poderá sobreescrever o método
-    // Esse método poderá ser usado dentro da classe mas não estará visível
-    // fora da class para ser usado deverá ser extendido.
+    *** PROTECTED *** 
+        // Significa que quem estender esta class poderá sobreescrever o método
+        // Esse método poderá ser usado dentro da classe mas não estará visível
+        // fora da class para ser usado deverá ser extendido.
 
-    //* ***Abstract*** */
+    *** Abstract *** 
         Uma class Abstract NÃO PODE SER IMPLEMENTADA, ou seja, vc não pode dar um
         "new" nela, pode apenas ser expendida.
         impede que seja inicializada. 
@@ -92,3 +92,16 @@
         O modo instruido apresentado foi de desenvolver um método que me faça essa validação
         e me retorne um erro que meu tratamento conheça, ou seja,uma camada de proteção para 
         evitar que a validação seja feita por terceiros. 
+
+    *** Logger ***
+        Por que é importante loggar em formato json?
+        Porque fica mais facil de parsear e transformar isso em métricas.
+        Possibilitando pegar os campos e transformar em algo que tu consiga monitorar 
+
+    ** JWT Anotaçoes ***
+      atributo que poderia ser colado dentro do obj payload: expiraEm: Date.now() + cincoDiasEmMilissegundos = 432000000
+      jwt.sign: Gera e assina o token baseado no payload;
+      cabeçalho gerado automaticamente;
+      segundo parametro é a SENHA SECRETA do servidor:
+      *** COMANDO DE TERMINAL ***
+      node -e "console.log(require('crypto').randomBytes(256).toString('base64'))"
