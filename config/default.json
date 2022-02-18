@@ -15,7 +15,10 @@
       }
     },
     "logger": {
-      "enabled": true,
+      "enabled": {"if": [ 
+        {"==": [{"var": "scripts"}, "test"]}, false,
+        {"==": [{"var": "scripts"}, "start || start:dev"]}, true
+      ]},
       "level": "info"
     }
   }
