@@ -1,7 +1,7 @@
 import { ForecastPoint, StormGlass } from '@src/clients/stormGlass';
 import logger  from '@src/logger';
 import { Beach } from '@src/models/beach';
-import { InternalError } from '@src/util/internal-error';
+import { InternalError } from '@src/util/errors/internal-error';
 
 //Omit irá omitir o campo user do Beach
 export interface BeachForecast extends Omit<Beach, 'user'>, ForecastPoint {}
@@ -37,7 +37,8 @@ export class Forecast {
         pointsWithCorrectSources.push(...enrichedBeachData);
       }
       if(pointsWithCorrectSources.length === 0 ) {
-        logger.error(InternalError);
+        logger.error(new ForecastProcessInternalError('Request failed: Empty object'));
+        
       }
       return this.mapForecastByTime(pointsWithCorrectSources);
     } catch (error) {

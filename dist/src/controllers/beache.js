@@ -17,6 +17,7 @@ const core_1 = require("@overnightjs/core");
 const beach_1 = require("@src/models/beach");
 const mongoose_1 = __importDefault(require("mongoose"));
 const auth_1 = require("@src/middlewares/auth");
+const logger_1 = __importDefault(require("@src/logger"));
 let BeachesController = class BeachesController {
     async create(req, res) {
         try {
@@ -29,6 +30,7 @@ let BeachesController = class BeachesController {
                 res.status(422).send({ error: error.message });
             }
             else {
+                logger_1.default.error(error);
                 res.status(500).send({ error: error.message });
             }
         }

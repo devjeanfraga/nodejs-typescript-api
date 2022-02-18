@@ -1,7 +1,12 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Forecast = exports.ForecastProcessInternalError = void 0;
 const stormGlass_1 = require("@src/clients/stormGlass");
+const logger_1 = __importDefault(require("@src/logger"));
+const beach_1 = require("@src/models/beach");
 const internal_error_1 = require("@src/util/internal-error");
 class ForecastProcessInternalError extends internal_error_1.InternalError {
     constructor(message) {
@@ -14,12 +19,16 @@ class Forecast {
         this.stormGlass = stormGlass;
     }
     async processForecastForBeaches(beaches) {
+        logger_1.default.info(`Preparing the forecast for ${beach_1.Beach.length} breach (s)`);
         try {
             const pointsWithCorrectSources = [];
             for (const beach of beaches) {
                 const points = await this.stormGlass.fetchPoints(beach.lat, beach.lng);
                 const enrichedBeachData = this.enrichedBeachData(points, beach);
                 pointsWithCorrectSources.push(...enrichedBeachData);
+            }
+            if (pointsWithCorrectSources.length === 0) {
+                logger_1.default.error(new ForecastProcessInternalError('Request failed: Empty object'));
             }
             return this.mapForecastByTime(pointsWithCorrectSources);
         }

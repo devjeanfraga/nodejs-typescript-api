@@ -1,4 +1,4 @@
-import { InternalError } from '@src/util/internal-error';
+import { InternalError } from '@src/util/errors/internal-error';
 import * as HTTPUtil from '@src/util/Request';
 import { IConfig } from 'config';
 import config from 'config/';

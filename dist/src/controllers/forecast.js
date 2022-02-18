@@ -8,12 +8,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ForecastController = void 0;
 const core_1 = require("@overnightjs/core");
 const forecast_1 = require("@src/services/forecast");
 const beach_1 = require("@src/models/beach");
 const auth_1 = require("@src/middlewares/auth");
+const logger_1 = __importDefault(require("@src/logger"));
 const forecast = new forecast_1.Forecast();
 let ForecastController = class ForecastController {
     async getForecastForLoggedUser(req, res) {
@@ -23,6 +27,7 @@ let ForecastController = class ForecastController {
             res.status(200).send(forecastData);
         }
         catch (error) {
+            logger_1.default.error(error);
             res.status(500).send({ error: 'somethings went wrong' });
         }
     }
