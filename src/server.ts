@@ -10,6 +10,7 @@ import * as database from '@src/util/database';
 import logger from './logger';
 import expressPino from 'express-pino-logger';
 
+
 export class SetupServer extends Server {
   constructor(private port = 3000) {
     super();
