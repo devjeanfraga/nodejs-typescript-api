@@ -18,17 +18,27 @@ const forecast_1 = require("@src/services/forecast");
 const beach_1 = require("@src/models/beach");
 const auth_1 = require("@src/middlewares/auth");
 const logger_1 = __importDefault(require("@src/logger"));
+const _1 = require(".");
 const forecast = new forecast_1.Forecast();
-let ForecastController = class ForecastController {
+let ForecastController = class ForecastController extends _1.BaseController {
     async getForecastForLoggedUser(req, res) {
         try {
             const beach = await beach_1.Beach.find({ user: req.decoded?.id });
             const forecastData = await forecast.processForecastForBeaches(beach);
+            if (!forecastData) {
+                this.sendErrorResponse(res, {
+                    code: 500,
+                    message: 'somethings went wrong'
+                });
+            }
             res.status(200).send(forecastData);
         }
         catch (error) {
             logger_1.default.error(error);
-            res.status(500).send({ error: 'somethings went wrong' });
+            this.sendErrorResponse(res, {
+                code: 500,
+                message: 'somethings went wrong'
+            });
         }
     }
 };

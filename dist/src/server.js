@@ -23,6 +23,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SetupServer = void 0;
+const cors_1 = __importDefault(require("cors"));
 const core_1 = require("@overnightjs/core");
 require("./util/module-alias");
 const body_parser_1 = __importDefault(require("body-parser"));
@@ -31,6 +32,7 @@ const beache_1 = require("./controllers/beache");
 const users_1 = require("@src/controllers/users");
 const database = __importStar(require("@src/util/database"));
 const logger_1 = __importDefault(require("./logger"));
+const express_pino_logger_1 = __importDefault(require("express-pino-logger"));
 class SetupServer extends core_1.Server {
     constructor(port = 3000) {
         super();
@@ -43,6 +45,12 @@ class SetupServer extends core_1.Server {
     }
     setupExpress() {
         this.app.use(body_parser_1.default.json());
+        this.app.use((0, express_pino_logger_1.default)({
+            logger: logger_1.default
+        }));
+        this.app.use((0, cors_1.default)({
+            origin: '*'
+        }));
     }
     setupControllers() {
         const forecastController = new forecast_1.ForecastController();

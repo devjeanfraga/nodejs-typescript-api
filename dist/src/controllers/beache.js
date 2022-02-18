@@ -8,17 +8,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BeachesController = void 0;
 const core_1 = require("@overnightjs/core");
 const beach_1 = require("@src/models/beach");
-const mongoose_1 = __importDefault(require("mongoose"));
 const auth_1 = require("@src/middlewares/auth");
-const logger_1 = __importDefault(require("@src/logger"));
-let BeachesController = class BeachesController {
+const _1 = require(".");
+let BeachesController = class BeachesController extends _1.BaseController {
     async create(req, res) {
         try {
             const beach = new beach_1.Beach({ ...req.body, ...{ user: req.decoded?.id } });
@@ -26,13 +22,7 @@ let BeachesController = class BeachesController {
             res.status(201).send(result);
         }
         catch (error) {
-            if (error instanceof mongoose_1.default.Error.ValidationError) {
-                res.status(422).send({ error: error.message });
-            }
-            else {
-                logger_1.default.error(error);
-                res.status(500).send({ error: error.message });
-            }
+            this.sendCreatedUpdateDataResponse(res, error);
         }
     }
 };

@@ -7,7 +7,7 @@ exports.Forecast = exports.ForecastProcessInternalError = void 0;
 const stormGlass_1 = require("@src/clients/stormGlass");
 const logger_1 = __importDefault(require("@src/logger"));
 const beach_1 = require("@src/models/beach");
-const internal_error_1 = require("@src/util/internal-error");
+const internal_error_1 = require("@src/util/errors/internal-error");
 class ForecastProcessInternalError extends internal_error_1.InternalError {
     constructor(message) {
         super(`Unexpected error during the forecast processing: ${message}`);

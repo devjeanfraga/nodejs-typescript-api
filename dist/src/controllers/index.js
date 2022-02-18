@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.BaseController = void 0;
 const logger_1 = __importDefault(require("@src/logger"));
 const users_1 = require("@src/models/users");
+const api_error_1 = __importDefault(require("@src/util/errors/api-error"));
 const mongoose_1 = __importDefault(require("mongoose"));
 class BaseController {
     sendCreatedUpdateDataResponse(res, error) {
@@ -15,14 +16,17 @@ class BaseController {
         }
         else {
             logger_1.default.error(error);
-            return res.status(500).send({ code: 500, error: 'Something went wrong' });
+            return res.status(500).send(api_error_1.default.format({ code: 500, message: 'Something went wrong' }));
         }
+    }
+    sendErrorResponse(res, apiError) {
+        return res.status(apiError.code).send(api_error_1.default.format(apiError));
     }
     handleClientErrors(error, res) {
         Object.values(error.errors).filter((err) => {
             err.name === 'ValidatorError' && err.kind === users_1.CUSTOM_VALIDATION.DUPLICATED
-                ? (res = res.status(409).send({ code: 409, error: error.message }))
-                : (res = res.status(422).send({ code: 422, error: error.message }));
+                ? (res = res.status(409).send(api_error_1.default.format({ code: 409, message: error.message })))
+                : (res = res.status(422).send(api_error_1.default.format({ code: 422, message: error.message })));
         });
         return res;
     }

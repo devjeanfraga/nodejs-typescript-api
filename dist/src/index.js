@@ -12,7 +12,6 @@ var ExitStatus;
     ExitStatus[ExitStatus["Failure"] = 1] = "Failure";
     ExitStatus[ExitStatus["Success"] = 0] = "Success";
 })(ExitStatus || (ExitStatus = {}));
-process_1.default.on('SIGINT', () => console.log(" O INT AQUI !"));
 process_1.default.on('unhandledRejection', (reason, promise) => {
     logger_1.default.error(`App exiting due to uncaught promise: ${promise} and ${reason}`);
     throw reason;
