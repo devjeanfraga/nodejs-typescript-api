@@ -1,5 +1,5 @@
 //test de integração
-import { Beach, BeachPosition } from '@src/models/beach';
+import { Beach, GeoPosition } from '@src/models/beach';
 import nock from 'nock';
 import StormGlassWeather3HoursFixture from '@test/fixtures/stormGlass_weather_3_hours.json';
 import ApiForecastResponse1BeachFixture from '@test/fixtures/api_forecast_response_1_beach.json';
@@ -23,7 +23,7 @@ describe('Beach forecast fucntional', () => {
       lat: -33.792726,
       lng: 151.289824,
       name: 'Manly',
-      position: BeachPosition.E,
+      position: GeoPosition.E,
       user: user.id,
     };
     token = AuthServices.generateToken(user.toJSON());
