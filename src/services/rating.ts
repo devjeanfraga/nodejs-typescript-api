@@ -1,4 +1,5 @@
-import {Beach, BeachPosition} from '@src/models/beach'
+import { ForecastPoint } from '@src/clients/stormGlass';
+import {Beach, GeoPosition} from '@src/models/beach'
 
 //Estrutura de dados para referenciar as alturas e nao deixar
 // número pulverizados pelo algoritmo 
@@ -20,7 +21,22 @@ const waveHeights = {
 export class Rating {
   constructor (private beach: Beach){}
 
-  public getRatingBasedOnWindAndOnWavePosition(wavePosition: BeachPosition, windPosition: BeachPosition): number {
+  public getRateForPoint(point: ForecastPoint): number {
+    const swellDirection = this.getPositionFromLocation(point.swellDirection);
+    const windDirection = this.getPositionFromLocation(point.windDirection);
+    const windAndWaveRating = this.getRatingBasedOnWindAndOnWavePosition(
+      swellDirection,
+      windDirection
+    );
+    const swellHeightRating = this.getRatingForSwellSize(point.swellHeight);
+    const sweelPeriodRating = this.getRatingForSwellPeriod(point.swellPeriod);
+    const finalRating = 
+      (windAndWaveRating + swellHeightRating + sweelPeriodRating) / 3;
+    
+    return Math.round(finalRating);  
+  }
+
+  public getRatingBasedOnWindAndOnWavePosition(wavePosition: GeoPosition, windPosition: GeoPosition): number {
     if(wavePosition === windPosition) {
       //onshore
       return 1;
@@ -65,45 +81,43 @@ export class Rating {
     return 1;
   }
 
-  public getPositionFromLocation(cordinates: number ):BeachPosition {
+  public getPositionFromLocation(cordinates: number ):GeoPosition {
     if( cordinates > 315 || (cordinates <= 45 && cordinates >= 0)) {
-      return BeachPosition.N;
+      return GeoPosition.N;
     }
     if(cordinates > 45 && cordinates <= 135 ) {
-      return BeachPosition.E
+      return GeoPosition.E
     }
     if( cordinates > 135 && cordinates <= 255 ) {
-      return BeachPosition.S
+      return GeoPosition.S
     }
     
-    return BeachPosition.W
+    return GeoPosition.W
   }
 
   // O is no inicio dos metodos indica um boolean
   // Método para saber a prosição da praia
-  private isWindOffShore(waveDirection: BeachPosition, windDirection: BeachPosition): boolean {
+  private isWindOffShore(waveDirection: GeoPosition, windDirection: GeoPosition): boolean {
    const result =  (
       //check norte 
-      ( waveDirection === BeachPosition.N &&
-        windDirection === BeachPosition.S &&
-        this.beach.position === BeachPosition.N) ||
+      ( waveDirection === GeoPosition.N &&
+        windDirection === GeoPosition.S &&
+        this.beach.position === GeoPosition.N) ||
       //check Sul
-      ( waveDirection === BeachPosition.S &&
-        windDirection === BeachPosition.N &&
-        this.beach.position === BeachPosition.S) ||
+      ( waveDirection === GeoPosition.S &&
+        windDirection === GeoPosition.N &&
+        this.beach.position === GeoPosition.S) ||
       //check Leste
-      ( waveDirection === BeachPosition.E &&
-        windDirection === BeachPosition.W &&
-        this.beach.position === BeachPosition.E) ||
+      ( waveDirection === GeoPosition.E &&
+        windDirection === GeoPosition.W &&
+        this.beach.position === GeoPosition.E) ||
       //check Oeste
-      ( waveDirection === BeachPosition.W &&
-        windDirection === BeachPosition.E &&
-        this.beach.position === BeachPosition.W)  
+      ( waveDirection === GeoPosition.W &&
+        windDirection === GeoPosition.E &&
+        this.beach.position === GeoPosition.W)  
     )
-    console.log(result);
+    //console.log(result);
     return result 
   }
-
-
 
 }
