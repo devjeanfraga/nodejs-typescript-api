@@ -1,14 +1,22 @@
-import cors from 'cors';
-import { Server } from '@overnightjs/core';
 import './util/module-alias';
+import { Server } from '@overnightjs/core';
 import bodyParser from 'body-parser';
+import expressPino from 'express-pino-logger';
+import cors from 'cors';
+import apiSchema from './api.schema.json';
+import swaggerUi from 'swagger-ui-express';
+
+import * as OpenApiValidator from 'express-openapi-validator';
+import { OpenAPIV3 } from 'express-openapi-validator/dist/framework/types'; //types 
+
 import { ForecastController } from './controllers/forecast';
 import { BeachesController } from './controllers/beache';
 import { UsersController } from '@src/controllers/users';
 import { Application } from 'express';
 import * as database from '@src/util/database';
 import logger from './logger';
-import expressPino from 'express-pino-logger';
+
+
 
 
 export class SetupServer extends Server {
@@ -19,6 +27,7 @@ export class SetupServer extends Server {
   //médoto para inicializar o servidor;
   public async init(): Promise<void> { 
     this.setupExpress();
+    this.docsSetup();
     this.setupControllers();
     await this.setupDatabase();
 
@@ -48,6 +57,19 @@ export class SetupServer extends Server {
       beachesController,
       usersController,
     ]);
+  }
+
+  private async docsSetup(): Promise<void>{
+    this.app.use('/docs', swaggerUi.serve, swaggerUi.setup());
+    this.app.use(OpenApiValidator.middleware({
+      /**
+       * apiSpec aceita dois tipos de arquivos o Document do tipo openApiV3 
+       * ou uma String onde pode se passar um path para um yml
+       */
+      apiSpec: apiSchema as OpenAPIV3.Document,
+      validateRequests: true,
+      validateResponses: true
+    }))
   }
 
   public getApp(): Application {
