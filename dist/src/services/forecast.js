@@ -8,6 +8,8 @@ const stormGlass_1 = require("@src/clients/stormGlass");
 const logger_1 = __importDefault(require("@src/logger"));
 const beach_1 = require("@src/models/beach");
 const internal_error_1 = require("@src/util/errors/internal-error");
+const rating_1 = require("./rating");
+const lodash_1 = __importDefault(require("lodash"));
 class ForecastProcessInternalError extends internal_error_1.InternalError {
     constructor(message) {
         super(`Unexpected error during the forecast processing: ${message}`);
@@ -15,37 +17,44 @@ class ForecastProcessInternalError extends internal_error_1.InternalError {
 }
 exports.ForecastProcessInternalError = ForecastProcessInternalError;
 class Forecast {
-    constructor(stormGlass = new stormGlass_1.StormGlass()) {
+    constructor(stormGlass = new stormGlass_1.StormGlass(), RatingService = rating_1.Rating) {
         this.stormGlass = stormGlass;
+        this.RatingService = RatingService;
     }
     async processForecastForBeaches(beaches) {
-        logger_1.default.info(`Preparing the forecast for ${beach_1.Beach.length} breach (s)`);
         try {
-            const pointsWithCorrectSources = [];
-            for (const beach of beaches) {
-                const points = await this.stormGlass.fetchPoints(beach.lat, beach.lng);
-                const enrichedBeachData = this.enrichedBeachData(points, beach);
-                pointsWithCorrectSources.push(...enrichedBeachData);
-            }
-            if (pointsWithCorrectSources.length === 0) {
-                logger_1.default.error(new ForecastProcessInternalError('Request failed: Empty object'));
-            }
-            return this.mapForecastByTime(pointsWithCorrectSources);
+            const beachForecast = await this.calculateRating(beaches);
+            const timeForecast = this.mapForecastByTime(beachForecast);
+            return timeForecast.map((t) => ({
+                time: t.time,
+                forecast: lodash_1.default.orderBy(t.forecast, ['rating'], ['desc'])
+            }));
         }
         catch (error) {
             throw new ForecastProcessInternalError(error.message);
         }
     }
-    enrichedBeachData(points, beach) {
-        return points.map((e) => ({
+    async calculateRating(beaches) {
+        logger_1.default.info(`Preparing the forecast for ${beach_1.Beach.length} breach (s)`);
+        const pointsWithCorrectSources = [];
+        for (const beach of beaches) {
+            const rating = new this.RatingService(beach);
+            const points = await this.stormGlass.fetchPoints(beach.lat, beach.lng);
+            const enrichedBeachData = this.enrichedBeachData(points, beach, rating);
+            pointsWithCorrectSources.push(...enrichedBeachData);
+        }
+        return pointsWithCorrectSources;
+    }
+    enrichedBeachData(points, beach, rating) {
+        return points.map((point) => ({
             ...{
                 lat: beach.lat,
                 lng: beach.lng,
                 name: beach.name,
                 position: beach.position,
-                rating: 1,
+                rating: rating.getRateForPoint(point)
             },
-            ...e,
+            ...point,
         }));
     }
     mapForecastByTime(forecast) {

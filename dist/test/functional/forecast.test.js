@@ -24,7 +24,7 @@ describe('Beach forecast fucntional', () => {
             lat: -33.792726,
             lng: 151.289824,
             name: 'Manly',
-            position: beach_1.BeachPosition.E,
+            position: beach_1.GeoPosition.E,
             user: user.id,
         };
         token = auth_1.default.generateToken(user.toJSON());

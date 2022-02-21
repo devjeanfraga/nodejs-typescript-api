@@ -3,6 +3,8 @@ import * as HTTPUtil from '@src/util/Request';
 import { IConfig } from 'config';
 import config from 'config/';
 
+
+
 export interface StormGlassPointSource {
   [key: string]: number; // a key seria a string "noaa" do response;
 }
@@ -58,9 +60,12 @@ export class StormGlass {
   readonly stormGlassAPISource = 'noaa';
 
   constructor(protected request = new HTTPUtil.Request()) {}
+  
+  //// *** Connecta com StormGlass API e retorna a previsao da praia de acordo com a Latitude e Longitude *** /////
 
   public async fetchPoints(lat: number, lng: number): Promise<ForecastPoint[]> {
     try {
+      
       const response = await this.request.get<StormGlassForecastResponse>(
         `${stormGlassRessourceConfig.get('apiURL')}/weather/point?lat=${lat}&lng=${lng}&params=${this.stormGlassAPIParams}&source=${this.stormGlassAPISource}`,
         {
@@ -69,11 +74,14 @@ export class StormGlass {
           },
         }
       );
-
+      if (!response) {
+        throw new ClientRequestError('Somethings wents wrong');
+      }
       return this.normalizeResponse(response.data);
       //eslint-disable-next-line
-    } catch (err: any) { 
-
+    } catch (err:any) { 
+       
+      
       if (HTTPUtil.Request.isRequestError(err)) {
         const dataError = JSON.stringify(err.response.data).replace(/["]/g, '');
         const codeError = err.response.status;

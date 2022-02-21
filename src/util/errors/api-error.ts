@@ -20,7 +20,7 @@ export default class APIError {
   public static format( error: IAPIError): APIErrorResponse {
     return {
       ...{
-        message: error.message,
+      message: error.message,
       code: error.code,
       error: error.codeAsString 
       ? error.codeAsString 

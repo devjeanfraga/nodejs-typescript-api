@@ -19,15 +19,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Beach = exports.BeachPosition = void 0;
+exports.Beach = exports.GeoPosition = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
-var BeachPosition;
-(function (BeachPosition) {
-    BeachPosition["S"] = "S";
-    BeachPosition["E"] = "E";
-    BeachPosition["W"] = "W";
-    BeachPosition["N"] = "N";
-})(BeachPosition = exports.BeachPosition || (exports.BeachPosition = {}));
+var GeoPosition;
+(function (GeoPosition) {
+    GeoPosition["S"] = "S";
+    GeoPosition["E"] = "E";
+    GeoPosition["W"] = "W";
+    GeoPosition["N"] = "N";
+})(GeoPosition = exports.GeoPosition || (exports.GeoPosition = {}));
 const schema = new mongoose_1.Schema({
     lat: { type: Number, required: true },
     lng: { type: Number, required: true },

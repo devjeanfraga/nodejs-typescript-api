@@ -54,6 +54,9 @@ class StormGlass {
                     Authorization: stormGlassRessourceConfig.get('apiToken'),
                 },
             });
+            if (!response) {
+                throw new ClientRequestError('Somethings wents wrong');
+            }
             return this.normalizeResponse(response.data);
         }
         catch (err) {

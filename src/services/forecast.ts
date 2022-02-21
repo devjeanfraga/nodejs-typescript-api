@@ -2,6 +2,8 @@ import { ForecastPoint, StormGlass } from '@src/clients/stormGlass';
 import logger  from '@src/logger';
 import { Beach } from '@src/models/beach';
 import { InternalError } from '@src/util/errors/internal-error';
+import { Rating } from './rating';
+import _ from 'lodash'; // padrão pro lodashs er importado é em "_"
 
 //Omit irá omitir o campo user do Beach
 export interface BeachForecast extends Omit<Beach, 'user'>, ForecastPoint {}
@@ -18,29 +20,33 @@ export class ForecastProcessInternalError extends InternalError {
 }
 
 export class Forecast {
-  //Passamos uma instancia da class para
-  //possibilitar que futuramente outros serviços possam ser aplicados ao Forecast
-  constructor(protected stormGlass = new StormGlass()) {}
 
+  constructor( 
+
+    //Passamos uma instancia da class para
+    //possibilitar que futuramente outros 
+    //serviços possam ser aplicados ao Forecast
+    protected stormGlass = new StormGlass(), 
+
+    // importa-se a classe em si para que
+    // seja instaciada dentro de Forecast
+    protected RatingService: typeof Rating = Rating  
+
+    ) {}
+
+  
   public async processForecastForBeaches(
+
     beaches: Beach[]
+
   ): Promise<TimeForecast[]> {
-
-    logger.info(
-      `Preparing the forecast for ${Beach.length} breach (s)`);
     try {
-      const pointsWithCorrectSources: BeachForecast[] = [];
-      for (const beach of beaches) {
-        const points = await this.stormGlass.fetchPoints(beach.lat, beach.lng);
-        const enrichedBeachData = this.enrichedBeachData(points, beach);
-
-        pointsWithCorrectSources.push(...enrichedBeachData);
-      }
-      if(pointsWithCorrectSources.length === 0 ) {
-        logger.error(new ForecastProcessInternalError('Request failed: Empty object'));
-        
-      }
-      return this.mapForecastByTime(pointsWithCorrectSources);
+        const beachForecast = await this.calculateRating(beaches)
+        const timeForecast = this.mapForecastByTime(beachForecast);
+        return timeForecast.map((t)=> ({
+          time: t.time,
+          forecast: _.orderBy(t.forecast, ['rating'], ['desc'])
+        }));
     } catch (error) {
       
       throw new ForecastProcessInternalError(
@@ -49,20 +55,35 @@ export class Forecast {
     }
   }
 
+
+  private async calculateRating( beaches: Beach[] ):Promise<BeachForecast[]>{
+    logger.info(`Preparing the forecast for ${Beach.length} breach (s)`); 
+    const pointsWithCorrectSources: BeachForecast[] =  []; //Array que vai receber as praias com suas previsões
+    for (const beach of beaches) {
+      const rating = new this.RatingService(beach);
+      const points = await this.stormGlass.fetchPoints(beach.lat, beach.lng);
+      const enrichedBeachData = this.enrichedBeachData(points, beach, rating);
+
+      pointsWithCorrectSources.push(...enrichedBeachData);
+    }
+    return pointsWithCorrectSources;
+  }
+
   private enrichedBeachData(
     points: ForecastPoint[],
-    beach: Beach
+    beach: Beach,
+    rating: Rating
   ): BeachForecast[] {
-    return points.map((e) => ({
+    return points.map((point) => ({
       //Iremos fazer o marge do obj retornado do  stormGlass com o objeto beaches
       ...{
         lat: beach.lat,
         lng: beach.lng,
         name: beach.name,
         position: beach.position,
-        rating: 1,
+        rating: rating.getRateForPoint(point)
       },
-      ...e,
+      ...point,
     }));
   }
 
@@ -71,7 +92,8 @@ export class Forecast {
 
     for (const point of forecast) {
       //loop onde point será o objeto de dados do forecast com o stormGlass;
-      const timePoint = forecastByTime.find((f) => f.time === point.time); //verifico se forecastBytime Array tem algum valor de time igual ao forecast.time
+      //verifico se forecastBytime Array tem algum valor de time igual ao forecast.time
+      const timePoint = forecastByTime.find((f) => f.time === point.time); 
 
       if (timePoint) {
         timePoint.forecast.push(point); //caso a premissa anterior seja verdadeira damos um push do forecast na key forecast
