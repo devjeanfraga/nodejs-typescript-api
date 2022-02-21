@@ -9,13 +9,13 @@ jest.mock('@src/clients/stormGlass');
 describe('Forecast Services', () => {
   const mockedStormGlassService = new StormGlass() as jest.Mocked<StormGlass>;
 
-  it('Should return the forecast for a mutiple beaches in the same hour with different ratings', async ()=>{
+  it('Should return the forecast for a mutiple beaches in the same hour with different and ordered by ratings  ', async ()=>{
     mockedStormGlassService.fetchPoints.mockResolvedValueOnce( [
       {
         swellDirection: 123.41,
         swellHeight: 0.21,
         swellPeriod: 3.69,
-        time: "2022-01-20T00:00:00+00:00",
+        time: '2022-01-20T02:00:00+00:00',
         waveDirection: 232.12,
         waveHeight: .46,	
         windDirection: 315.48,
@@ -28,7 +28,7 @@ describe('Forecast Services', () => {
         swellDirection: 64.24,
         swellHeight:  0.15,
         swellPeriod:  13.89,
-        time: "2022-01-20T01:00:00+00:00",
+        time: '2022-01-20T02:00:00+00:00',
         waveDirection: 231.38,
         waveHeight:  2.07,
         windDirection:  299.45,
@@ -39,12 +39,12 @@ describe('Forecast Services', () => {
     mockedStormGlassService.fetchPoints.mockResolvedValueOnce([
       {
         swellDirection: 90.25,
-        swellHeight: 0.24,
+        swellHeight: 18.05,
         swellPeriod: 15.00,
         time: "2022-01-20T02:00:00+00:00",
-        waveDirection: 268.82,
+        waveDirection: 90.82,
         waveHeight: 1.14,
-        windDirection: 55.66,
+        windDirection: 270.66,
         windSpeed: 8.46
       }
     ]);
@@ -68,35 +68,30 @@ describe('Forecast Services', () => {
         lat: -33.792726,
         lng: 151.289824,
         name: 'Dee Why',
-        position: GeoPosition.S,
+        position: GeoPosition.W,
         user: 'fake-id',
       },
     ]
 
-    const expectedResponde =  [
+    const expectedResponse =  [
       {
-        time: '2022-01-20T00:00:00+00:00',
+        time: '2022-01-20T02:00:00+00:00',
         forecast: [
           {
             lat: -33.792726,
             lng: 151.289824,
-            name: 'Forte Sao Matheus',
-            position: 'N',
-            rating: 2,
-            swellDirection: 123.41,
-            swellHeight: 0.21,
-            swellPeriod: 3.69,
-            time: "2022-01-20T00:00:00+00:00",
-            waveDirection: 232.12,
-            waveHeight: .46,	
-            windDirection: 315.48,
-            windSpeed: 100	
+            name: 'Dee Why',
+            position: 'W',
+            rating: 4,
+            swellDirection: 90.25,
+            swellHeight: 18.05,
+            swellPeriod: 15.00,
+            time: "2022-01-20T02:00:00+00:00",
+            waveDirection: 90.82,
+            waveHeight: 1.14,
+            windDirection: 270.66,
+            windSpeed: 8.46
           },
-        ],
-      },
-      {
-        time: '2022-01-20T01:00:00+00:00',
-        forecast: [
           {
             lat: -33.792726,
             lng: 151.289824,
@@ -106,31 +101,26 @@ describe('Forecast Services', () => {
             swellDirection: 64.24,
             swellHeight:  0.15,
             swellPeriod:  13.89,
-            time: "2022-01-20T01:00:00+00:00",
+            time: '2022-01-20T02:00:00+00:00',
             waveDirection: 231.38,
             waveHeight:  2.07,
             windDirection:  299.45,
             windSpeed:  100
           },
-        ],
-      },
-      {
-        time: '2022-01-20T02:00:00+00:00',
-        forecast: [
           {
             lat: -33.792726,
             lng: 151.289824,
-            name: 'Dee Why',
-            position: 'S',
-            rating: 4,
-            swellDirection: 90.25,
-            swellHeight: 0.24,
-            swellPeriod: 15.00,
-            time: "2022-01-20T02:00:00+00:00",
-            waveDirection: 268.82,
-            waveHeight: 1.14,
-            windDirection: 55.66,
-            windSpeed: 8.46
+            name: 'Forte Sao Matheus',
+            position: 'N',
+            rating: 2,
+            swellDirection: 123.41,
+            swellHeight: 0.21,
+            swellPeriod: 3.69,
+            time: '2022-01-20T02:00:00+00:00',
+            waveDirection: 232.12,
+            waveHeight: .46,	
+            windDirection: 315.48,
+            windSpeed: 100	
           },
         ],
       },
@@ -138,7 +128,7 @@ describe('Forecast Services', () => {
 
     const forecast = new Forecast(mockedStormGlassService);
     const beachesWithRating = await forecast.processForecastForBeaches(beaches);
-    expect(beachesWithRating).toEqual(expectedResponde);
+    expect(beachesWithRating).toEqual(expectedResponse);
   });
 
   it('Shoud return the forecast for a list of beaches', async () => {
@@ -164,7 +154,7 @@ describe('Forecast Services', () => {
             lng: 151.289824,
             name: 'Manly',
             position: 'E',
-            rating: 1,
+            rating: 3,
             swellDirection: 164.19,
             swellHeight: 0.31,
             swellPeriod: 11.69,
@@ -184,7 +174,7 @@ describe('Forecast Services', () => {
             lng: 151.289824,
             name: 'Manly',
             position: 'E',
-            rating: 1,
+            rating: 3,
             swellDirection: 164.22,
             swellHeight: 0.32,
             swellPeriod: 11.62,
@@ -204,7 +194,7 @@ describe('Forecast Services', () => {
             lng: 151.289824,
             name: 'Manly',
             position: 'E',
-            rating: 1,
+            rating: 3,
             swellDirection: 164.24,
             swellHeight: 0.32,
             swellPeriod: 11.55,
