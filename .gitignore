@@ -65,6 +65,6 @@ typings/
 distd
 
 # outhers
-yarn.lock
+
 
 **.map
