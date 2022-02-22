@@ -22,8 +22,8 @@ export abstract class BaseController {
     error: unknown
   ): Response {
     if (error instanceof mongoose.Error.ValidationError) {
-      this.handleClientErrors(error, res);
-      return res;
+      return this.handleClientErrors(error, res);
+     
 
     } else {
       //ADD ERROR BY PINO 
@@ -43,7 +43,7 @@ export abstract class BaseController {
     Object.values(error.errors).filter((err) => {
       err.name === 'ValidatorError' && err.kind === CUSTOM_VALIDATION.DUPLICATED
         ? (res = res.status(409).send(APIError.format({ code: 409, message: error.message })))
-        : (res = res.status(422).send(APIError.format({ code: 422, message: error.message })));
+        : (res = res.status(400).send(APIError.format({ code: 400, message: error.message })));
     });
     return res;
   }

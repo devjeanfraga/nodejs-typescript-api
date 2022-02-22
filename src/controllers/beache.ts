@@ -15,7 +15,8 @@ export class BeachesController extends BaseController {
       res.status(201).send(result);
 
     } catch (error) {
-        this.sendCreatedUpdateDataResponse(res, error);
+      this.sendCreatedUpdateDataResponse(res, error);
+       
     }
   }
 }
