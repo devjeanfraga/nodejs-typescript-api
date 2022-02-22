@@ -1,9 +1,9 @@
+import APIError from '@src/util/errors/api-error';
 import { InternalError } from '@src/util/errors/internal-error';
 import * as HTTPUtil from '@src/util/Request';
+import { TimeUtil } from '@src/util/time';
 import { IConfig } from 'config';
 import config from 'config/';
-
-
 
 export interface StormGlassPointSource {
   [key: string]: number; // a key seria a string "noaa" do response;
@@ -51,7 +51,9 @@ export class StormGlassResponseError extends InternalError {
 }
 
 //Config
-const stormGlassRessourceConfig: IConfig = config.get('app.resources.StormGlass');
+const stormGlassRessourceConfig: IConfig = config.get(
+  'app.resources.StormGlass'
+);
 
 //MAIN CLASS
 export class StormGlass {
@@ -60,34 +62,36 @@ export class StormGlass {
   readonly stormGlassAPISource = 'noaa';
 
   constructor(protected request = new HTTPUtil.Request()) {}
-  
+
   //// *** Connecta com StormGlass API e retorna a previsao da praia de acordo com a Latitude e Longitude *** /////
 
   public async fetchPoints(lat: number, lng: number): Promise<ForecastPoint[]> {
+    const endtimestamp = TimeUtil.getUnixTimeForAFutureDay(1);
     try {
-      
       const response = await this.request.get<StormGlassForecastResponse>(
-        `${stormGlassRessourceConfig.get('apiURL')}/weather/point?lat=${lat}&lng=${lng}&params=${this.stormGlassAPIParams}&source=${this.stormGlassAPISource}`,
+        `${stormGlassRessourceConfig.get(
+          'apiURL'
+        )}/weather/point?lat=${lat}&lng=${lng}&params=${
+          this.stormGlassAPIParams
+        }&source=${this.stormGlassAPISource}&end=${endtimestamp}`,
         {
           headers: {
             Authorization: stormGlassRessourceConfig.get('apiToken'),
           },
         }
       );
-      if (!response) {
-        throw new ClientRequestError('Somethings wents wrong');
-      }
+
       return this.normalizeResponse(response.data);
       //eslint-disable-next-line
-    } catch (err:any) { 
-       
-      
+    } catch (err: any) {
       if (HTTPUtil.Request.isRequestError(err)) {
         const dataError = JSON.stringify(err.response.data).replace(/["]/g, '');
         const codeError = err.response.status;
         throw new StormGlassResponseError(
           `Error: ${dataError} Code: ${codeError}`
         );
+      } else if (err instanceof Error) {
+        APIError.format({ code: 500, message: err.message });
       }
       //throw new Error(`Unexpected error when trying to communicate to StormGlass: ${(err as Error).message}`);
       throw new ClientRequestError((err as { message: any }).message); //eslint-disable-line
