@@ -10,7 +10,7 @@ import apiSchema from './api.schema.json';
 import swaggerUi from 'swagger-ui-express';
 
 import * as OpenApiValidator from 'express-openapi-validator';
-import { OpenAPIV3 } from 'express-openapi-validator/dist/framework/types'; //types 
+import { OpenAPIV3 } from 'express-openapi-validator/dist/framework/types'; //types
 
 import { ForecastController } from './controllers/forecast';
 import { BeachesController } from './controllers/beache';
@@ -20,22 +20,18 @@ import { Application } from 'express';
 import * as database from '@src/util/database';
 import logger from './logger';
 
-
-
-
 export class SetupServer extends Server {
   constructor(private port = 3000) {
     super();
   }
 
   //médoto para inicializar o servidor;
-  public async init(): Promise<void> { 
+  public async init(): Promise<void> {
     this.setupExpress();
     this.docsSetup();
     this.setupControllers();
     await this.setupDatabase();
     this.setupErrorHandlers();
-
   }
 
   //cria o setup do Express ;
@@ -43,18 +39,18 @@ export class SetupServer extends Server {
     this.app.use(bodyParser.json());
     this.app.use(
       expressPino({
-        logger
+        logger,
       })
     );
     this.app.use(
       cors({
-        origin: '*'
+        origin: '*',
       })
     );
   }
 
-  private setupErrorHandlers ():void {
-    this.app.use(apiErrorValidator)
+  private setupErrorHandlers(): void {
+    this.app.use(apiErrorValidator);
   }
 
   //cria o setup do Controllers ;
@@ -69,17 +65,19 @@ export class SetupServer extends Server {
     ]);
   }
 
-  private async docsSetup(): Promise<void>{
+  private async docsSetup(): Promise<void> {
     this.app.use('/docs', swaggerUi.serve, swaggerUi.setup(apiSchema));
-    this.app.use(OpenApiValidator.middleware({
-      /**
-       * apiSpec aceita dois tipos de arquivos o Document do tipo openApiV3 
-       * ou uma String onde pode se passar um path para um yml
-       */
-      apiSpec: apiSchema as OpenAPIV3.Document,
-      validateRequests: true,
-      validateResponses: true
-    }))
+    this.app.use(
+      OpenApiValidator.middleware({
+        /**
+         * apiSpec aceita dois tipos de arquivos o Document do tipo openApiV3
+         * ou uma String onde pode se passar um path para um yml
+         */
+        apiSpec: apiSchema as OpenAPIV3.Document,
+        validateRequests: true,
+        validateResponses: true,
+      })
+    );
   }
 
   public getApp(): Application {
@@ -98,7 +96,7 @@ export class SetupServer extends Server {
   //Inicializar a applicação
   public start(): void {
     this.app.listen(this.port, () => {
-      logger.info('Server listening of port: ' + this.port );
+      logger.info('Server listening of port: ' + this.port);
     });
   }
 }

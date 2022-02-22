@@ -1,6 +1,6 @@
 import mongoose, { Document, Model } from 'mongoose';
 import AuthServices from '@src/services/auth';
-import logger  from '@src/logger';
+import logger from '@src/logger';
 
 // *** Criar o hash da password ***
 

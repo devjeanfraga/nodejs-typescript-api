@@ -9,30 +9,30 @@ jest.mock('@src/clients/stormGlass');
 describe('Forecast Services', () => {
   const mockedStormGlassService = new StormGlass() as jest.Mocked<StormGlass>;
 
-  it('Should return the forecast for a mutiple beaches in the same hour with different and ordered by ratings  ', async ()=>{
-    mockedStormGlassService.fetchPoints.mockResolvedValueOnce( [
+  it('Should return the forecast for a mutiple beaches in the same hour with different and ordered by ratings  ', async () => {
+    mockedStormGlassService.fetchPoints.mockResolvedValueOnce([
       {
         swellDirection: 123.41,
         swellHeight: 0.21,
         swellPeriod: 3.69,
         time: '2022-01-20T02:00:00+00:00',
         waveDirection: 232.12,
-        waveHeight: .46,	
+        waveHeight: 0.46,
         windDirection: 315.48,
-        windSpeed: 100	
-      }
+        windSpeed: 100,
+      },
     ]);
 
     mockedStormGlassService.fetchPoints.mockResolvedValueOnce([
       {
         swellDirection: 64.24,
-        swellHeight:  0.15,
-        swellPeriod:  13.89,
+        swellHeight: 0.15,
+        swellPeriod: 13.89,
         time: '2022-01-20T02:00:00+00:00',
         waveDirection: 231.38,
-        waveHeight:  2.07,
-        windDirection:  299.45,
-        windSpeed:  100
+        waveHeight: 2.07,
+        windDirection: 299.45,
+        windSpeed: 100,
       },
     ]);
 
@@ -40,16 +40,16 @@ describe('Forecast Services', () => {
       {
         swellDirection: 90.25,
         swellHeight: 18.05,
-        swellPeriod: 15.00,
-        time: "2022-01-20T02:00:00+00:00",
+        swellPeriod: 15.0,
+        time: '2022-01-20T02:00:00+00:00',
         waveDirection: 90.82,
         waveHeight: 1.14,
         windDirection: 270.66,
-        windSpeed: 8.46
-      }
+        windSpeed: 8.46,
+      },
     ]);
 
-    const beaches: Beach[]= [
+    const beaches: Beach[] = [
       {
         lat: -33.792726,
         lng: 151.289824,
@@ -71,9 +71,9 @@ describe('Forecast Services', () => {
         position: GeoPosition.W,
         user: 'fake-id',
       },
-    ]
+    ];
 
-    const expectedResponse =  [
+    const expectedResponse = [
       {
         time: '2022-01-20T02:00:00+00:00',
         forecast: [
@@ -85,12 +85,12 @@ describe('Forecast Services', () => {
             rating: 4,
             swellDirection: 90.25,
             swellHeight: 18.05,
-            swellPeriod: 15.00,
-            time: "2022-01-20T02:00:00+00:00",
+            swellPeriod: 15.0,
+            time: '2022-01-20T02:00:00+00:00',
             waveDirection: 90.82,
             waveHeight: 1.14,
             windDirection: 270.66,
-            windSpeed: 8.46
+            windSpeed: 8.46,
           },
           {
             lat: -33.792726,
@@ -99,13 +99,13 @@ describe('Forecast Services', () => {
             position: 'E',
             rating: 3,
             swellDirection: 64.24,
-            swellHeight:  0.15,
-            swellPeriod:  13.89,
+            swellHeight: 0.15,
+            swellPeriod: 13.89,
             time: '2022-01-20T02:00:00+00:00',
             waveDirection: 231.38,
-            waveHeight:  2.07,
-            windDirection:  299.45,
-            windSpeed:  100
+            waveHeight: 2.07,
+            windDirection: 299.45,
+            windSpeed: 100,
           },
           {
             lat: -33.792726,
@@ -118,9 +118,9 @@ describe('Forecast Services', () => {
             swellPeriod: 3.69,
             time: '2022-01-20T02:00:00+00:00',
             waveDirection: 232.12,
-            waveHeight: .46,	
+            waveHeight: 0.46,
             windDirection: 315.48,
-            windSpeed: 100	
+            windSpeed: 100,
           },
         ],
       },
@@ -132,10 +132,9 @@ describe('Forecast Services', () => {
   });
 
   it('Shoud return the forecast for a list of beaches', async () => {
-    mockedStormGlassService
-      .fetchPoints.mockResolvedValue(
-        stormGlassNormalizedResponseFixture
-      );
+    mockedStormGlassService.fetchPoints.mockResolvedValue(
+      stormGlassNormalizedResponseFixture
+    );
     const beaches: Beach[] = [
       {
         name: 'Manly',

@@ -5,10 +5,9 @@
 
 import logger from '@src/logger';
 import { CUSTOM_VALIDATION } from '@src/models/users';
-import APIError, {IAPIError} from '@src/util/errors/api-error';
+import APIError, { IAPIError } from '@src/util/errors/api-error';
 import { Response } from 'express';
 import mongoose from 'mongoose';
-
 
 export interface ResponseHandleError {
   code: number;
@@ -16,23 +15,22 @@ export interface ResponseHandleError {
 }
 
 export abstract class BaseController {
-
   protected sendCreatedUpdateDataResponse(
     res: Response,
     error: unknown
   ): Response {
     if (error instanceof mongoose.Error.ValidationError) {
       return this.handleClientErrors(error, res);
-     
-
     } else {
-      //ADD ERROR BY PINO 
+      //ADD ERROR BY PINO
       logger.error(error);
-      return res.status(500).send(APIError.format({ code: 500, message: 'Something went wrong'}));
+      return res
+        .status(500)
+        .send(APIError.format({ code: 500, message: 'Something went wrong' }));
     }
   }
 
-  protected sendErrorResponse (res: Response, apiError: IAPIError ): Response {
+  protected sendErrorResponse(res: Response, apiError: IAPIError): Response {
     return res.status(apiError.code).send(APIError.format(apiError));
   }
 
@@ -42,13 +40,15 @@ export abstract class BaseController {
   ): Response {
     Object.values(error.errors).filter((err) => {
       err.name === 'ValidatorError' && err.kind === CUSTOM_VALIDATION.DUPLICATED
-        ? (res = res.status(409).send(APIError.format({ code: 409, message: error.message })))
-        : (res = res.status(400).send(APIError.format({ code: 400, message: error.message })));
+        ? (res = res
+            .status(409)
+            .send(APIError.format({ code: 409, message: error.message })))
+        : (res = res
+            .status(400)
+            .send(APIError.format({ code: 400, message: error.message })));
     });
     return res;
   }
-
-
 }
 
 //Object.values(error.errors).filter((err) => {
