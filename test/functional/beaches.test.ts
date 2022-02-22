@@ -51,7 +51,7 @@ describe('Beaches functional test', () => {
       // do objeto como o Id que é dinamico;
     });
 
-    it('should return 422 when there is a validation Error', async () => {
+    it('should return a validation Error', async () => {
       const newBeach = {
         name: 'Manly',
         position: 'E',
@@ -64,11 +64,12 @@ describe('Beaches functional test', () => {
         .set({ 'x-access-token': token })
         .send(newBeach);
 
-      expect(response.status).toBe(422);
+      expect(response.status).toBe(400);
+     
       expect(response.body).toEqual({
-        code: 422,
-        error: 'Unprocessable Entity',
-        message: 'Beach validation failed: lat: Cast to Number failed for value "invalid_string" (type string) at path "lat"',
+        code: 400,
+        error: 'Bad Request',
+        message: 'request.body.lat should be number',
       });
     });
 
