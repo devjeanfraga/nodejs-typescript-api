@@ -4,7 +4,7 @@
   "description": "TypeScript Node.JS API",
   "main": "index.js",
   "scripts": {
-    "start": "yarn build && node dist/src/index.js | pino-pretty -c",
+    "start": "node dist/src/index.js | pino-pretty -c",
     "build": "node_modules/typescript/bin/tsc",
     "start:dev": "ts-node-dev --transpile-only src/index.ts | pino-pretty -c",
     "lint": "eslint  ./src ./test --ext .ts",
