@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node dist/src/index.js | pino-pretty -c",
     "build": "node_modules/typescript/bin/tsc",
-    "start:local": "dotenv -e .env ts-node-dev --transpile-only src/index.ts | pino-pretty -c",
+    "start:dev": "ts-node-dev --transpile-only src/index.ts | pino-pretty -c",
     "lint": "eslint  ./src ./test --ext .ts",
     "lint:fix": "eslint ./src ./test --ext .ts --fix",
     "test": "dotenv -e env yarn lint && yarn style:check && yarn test:unit && yarn test:functional",

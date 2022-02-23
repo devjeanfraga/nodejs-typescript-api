@@ -27,7 +27,8 @@ process.on('uncaughtException', (error) => {
 // então vamos fazer a funçao se auto invocar;
 (async (): Promise<void> => {
   try {
-    const server = new SetupServer(config.get('app.port') || 3000 );
+
+    const server = new SetupServer( config.get('app.port') );
     await server.init();
     server.start();
 
