@@ -1,6 +1,6 @@
 # Node.js API com Typescript
 
-![](C:\Users\Infinity\Pictures\Screenshots\img3.png)
+<img src="https://raw.githubusercontent.com/JeanFragaJS/nodejs-typescript-api/master/github/img2.png" width="929" height="482" />
 
 ## Tecnologias utilizadas
 
