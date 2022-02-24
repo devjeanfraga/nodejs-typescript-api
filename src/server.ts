@@ -16,7 +16,6 @@ import { ForecastController } from './controllers/forecast';
 import { BeachesController } from './controllers/beache';
 import { UsersController } from '@src/controllers/users';
 
-
 import { Application } from 'express';
 import * as database from '@src/util/database';
 import logger from './logger';
