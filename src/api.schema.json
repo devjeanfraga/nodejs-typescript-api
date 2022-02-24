@@ -21,6 +21,11 @@
     }
   ],
   "paths": {
+    "/": {
+      "get": {
+        "description": "home"
+        }
+      },
     "/users": {
       "post": {
         "description": "Create a new User",
