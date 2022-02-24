@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 
 
 @Controller('')
-export  class Welcome {
+export class Welcome {
   @Get('')
   public async home(_: Request, res: Response ): Promise<void> {
     res.status(200).send({"message": "Welcome to forecast-API"})  

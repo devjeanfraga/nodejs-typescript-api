@@ -15,6 +15,7 @@ import { OpenAPIV3 } from 'express-openapi-validator/dist/framework/types'; //ty
 import { ForecastController } from './controllers/forecast';
 import { BeachesController } from './controllers/beache';
 import { UsersController } from '@src/controllers/users';
+import { Welcome } from './controllers/welcome';
 
 import { Application } from 'express';
 import * as database from '@src/util/database';
@@ -58,10 +59,12 @@ export class SetupServer extends Server {
     const forecastController = new ForecastController();
     const beachesController = new BeachesController();
     const usersController = new UsersController();
+    const welcome = new Welcome();
     this.addControllers([
       forecastController,
       beachesController,
       usersController,
+      welcome
     ]);
   }
 
