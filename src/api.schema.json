@@ -21,16 +21,6 @@
     }
   ],
   "paths": {
-    "/": {
-      "get": {
-        "description": "home",
-        "response": {
-          "200": {
-            "content": "application/json"
-          }
-        }
-        }
-      },
     "/users": {
       "post": {
         "description": "Create a new User",
