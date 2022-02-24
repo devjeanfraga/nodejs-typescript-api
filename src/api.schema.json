@@ -23,7 +23,12 @@
   "paths": {
     "/": {
       "get": {
-        "description": "home"
+        "description": "home",
+        "response": {
+          "200": {
+            "content": "application/json"
+          }
+        }
         }
       },
     "/users": {
