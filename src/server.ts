@@ -64,7 +64,7 @@ export class SetupServer extends Server {
       forecastController,
       beachesController,
       usersController,
-      welcome
+      welcome,
     ]);
   }
 
