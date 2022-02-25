@@ -62,7 +62,7 @@ typings/
 .next
 
 # typescript compiled code
-distd
+dist
 
 # outhers
 
