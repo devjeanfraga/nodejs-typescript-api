@@ -10,7 +10,7 @@
     "lint": "eslint  ./src ./test --ext .ts",
     "lint:fix": "eslint ./src ./test --ext .ts --fix",
     "test": "dotenv -e env yarn lint && yarn style:check && yarn test:unit && yarn test:functional",
-    "test:functional": "dotenv -e env jest --projects ./test --runInBand",
+    "test:functional": "jest --projects ./test --runInBand",
     "test:unit": "jest",
     "style:check": "prettier --check src/**/*.ts test/**/*.ts",
     "style:fix": "prettier --write src/**/*.ts test/**/*.ts"
