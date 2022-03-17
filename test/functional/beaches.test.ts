@@ -1,3 +1,4 @@
+import { Post } from '@overnightjs/core';
 import { Beach } from '@src/models/beach';
 import { User } from '@src/models/users';
 import AuthServices from '@src/services/auth';
@@ -73,8 +74,29 @@ describe('Beaches functional test', () => {
       });
     });
 
-    it.skip('Should return 500 when there is any error other than validation error', async () => {
-      //Todo;
+    it('Should return 500 when there is any error other than validation error', async () => {
+      jest.spyOn(Beach.prototype, 'save').mockImplementationOnce( () => {
+        throw new Error()
+      })
+      const newBeach = {
+        name: 'Manly',
+        position: 'E',
+        lat: -33.792726,
+        lng: 151.289824,
+      }
+      
+      const response = await global.testRequest
+        .post('/beaches')
+        .set({'x-access-token': token})
+        .send(newBeach)
+
+      expect(response.body).toEqual({
+           code: 500,
+           error: "Internal Server Error",
+           message: "Something went wrong",
+         })
+
+
     });
   });
 });
