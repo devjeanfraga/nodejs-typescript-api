@@ -1,3 +1,5 @@
+## NOTA
+   **Nesse curso aprendi a desenvolver por meio de testes e aperfeiçoar minhas habilidades com typescript**
 # Node.js API com Typescript
 
 <img src="https://raw.githubusercontent.com/JeanFragaJS/nodejs-typescript-api/master/github/img2.png" width="929" height="482" />
